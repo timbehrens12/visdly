@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { useAuth } from '../contexts/AuthContext';
+import { useClerkSession } from '../lib/clerk';
 
 type SurveyData = {
     hearAboutUs: string;
@@ -62,7 +62,7 @@ interface OnboardingModalProps {
 }
 
 export const OnboardingModal = ({ isOpen, onComplete }: OnboardingModalProps) => {
-    const { user } = useAuth();
+    const { userId } = useClerkSession();
     const [currentStep, setCurrentStep] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [data, setData] = useState<SurveyData>({
@@ -106,7 +106,7 @@ export const OnboardingModal = ({ isOpen, onComplete }: OnboardingModalProps) =>
             setCurrentStep(currentStep + 1);
         } else {
             // Complete onboarding
-            if (!user || isSubmitting) return;
+            if (!userId || isSubmitting) return;
             
             setIsSubmitting(true);
             try {
@@ -117,7 +117,7 @@ export const OnboardingModal = ({ isOpen, onComplete }: OnboardingModalProps) =>
                         onboarding_data: data,
                         updated_at: new Date().toISOString()
                     })
-                    .eq('id', user.id);
+                    .eq('id', userId);
 
                 if (error) throw error;
                 onComplete();

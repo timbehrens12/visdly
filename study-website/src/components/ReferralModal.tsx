@@ -10,7 +10,7 @@ interface ReferralModalProps {
 
 export const ReferralModal = ({ isOpen, onClose }: ReferralModalProps) => {
     const [copied, setCopied] = useState(false);
-    const referralLink = "https://www.visdly.com/sign-up?ref=BC8YVR2G";
+    const referralLink = "https://www.viszmo.com/sign-up?ref=BC8YVR2G";
     const inputRef = useRef<HTMLInputElement>(null);
     const [mounted, setMounted] = useState(false);
 

@@ -2,6 +2,7 @@ import { type ReactNode } from 'react';
 import { ThemeProvider } from './ThemeContext';
 import { OSProvider } from './OSContext';
 import { ClerkAuthProvider } from '../lib/clerk';
+import { ProfileProvider } from './ProfileContext';
 
 interface CombinedProviderProps {
     children: ReactNode;
@@ -12,7 +13,9 @@ export function CombinedProvider({ children }: CombinedProviderProps) {
         <ThemeProvider>
             <OSProvider>
                 <ClerkAuthProvider>
-                    {children}
+                    <ProfileProvider>
+                        {children}
+                    </ProfileProvider>
                 </ClerkAuthProvider>
             </OSProvider>
         </ThemeProvider>

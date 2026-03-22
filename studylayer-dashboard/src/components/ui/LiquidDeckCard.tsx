@@ -14,8 +14,8 @@ interface LiquidDeckCardProps {
         averageMastery: number;
     };
     delay?: number;
-    openDropdownId: string | number | null;
-    setOpenDropdownId: (id: string | number | null) => void;
+    openDropdownId: string | null;
+    setOpenDropdownId: (id: string | null) => void;
     handleDeckClick: (id: string) => void;
     handleEditDeck: (e: React.MouseEvent, id: string) => void;
     handleShareDeck: (id: string) => void;

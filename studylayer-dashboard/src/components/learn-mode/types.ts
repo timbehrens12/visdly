@@ -14,7 +14,7 @@ export interface TeachingContent {
 }
 
 export interface LearnCard {
-    id: number;
+    id: string;
     term: string;
     definition: string;
     starred?: boolean;

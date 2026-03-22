@@ -99,7 +99,7 @@ interface SettingsContextType {
 // Storage Key
 // ================================
 
-const SETTINGS_STORAGE_KEY = 'visdly_settings';
+const SETTINGS_STORAGE_KEY = 'viszmo_settings';
 
 // ================================
 // Default Settings

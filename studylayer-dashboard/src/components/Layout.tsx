@@ -17,10 +17,14 @@ import {
     Moon,
     Scroll,
     HelpCircle,
-    Crown
+    Crown,
+    MessageSquare,
+    Wand2
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useAuth } from '../contexts/AuthContext';
+import { useProfile } from '../contexts/ProfileContext';
+import { usePaywall } from '../contexts/PaywallContext';
+import { useClerkSession } from '../lib/clerk';
 // import { PixelTransition } from './PixelTransition';
 
 interface LayoutProps {
@@ -45,7 +49,13 @@ function Sidebar({
     const location = useLocation();
     const { debugEmpty, toggleDebugEmpty } = useDebug();
     const { resolvedTheme, toggleTheme } = useTheme();
-    const { user, signOut } = useAuth();
+    const { userImageUrl, userName, signOut } = useClerkSession();
+    const { profile } = useProfile();
+    const { openPaywall } = usePaywall();
+
+    const displayName = userName || 'User';
+    const displayEmail = ''; // userEmail was removed from clerk session destructuring
+    const displayAvatar = userImageUrl || '';
 
     const isActive = (path: string) => {
         if (path === '/') return location.pathname === '/';
@@ -59,9 +69,9 @@ function Sidebar({
             {/* Logo & Toggle */}
             <div className={`h-16 flex items-center border-border ${isCollapsed ? 'justify-center px-0' : 'px-6'}`}>
                 <div className={`overflow-hidden transition-all duration-200 ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
-                    <img src="/dashimages/full-logo.png.png" alt="StudyLayer" className="h-8 object-contain invert dark:invert-0" />
+                    <img src="/dashimages/full-logo.png.png" alt="Viszmo" className="h-8 object-contain invert dark:invert-0" />
                 </div>
-                {isCollapsed && <img src="/dashimages/visdly.png" alt="S" className="h-20 w-20 object-contain invert dark:invert-0" />}
+                {isCollapsed && <img src="/dashimages/visdly.png" alt="V" className="h-20 w-20 object-contain invert dark:invert-0" />}
             </div>
 
             {/* Floating Toggle Button */}
@@ -119,7 +129,7 @@ function Sidebar({
 
                 </div>
 
-                {/* AI section hidden
+                {/* AI section hidden */}
                 <div className="mt-6 space-y-1">
                     {!isCollapsed && (
                         <div className="px-4 mb-2 text-xs font-bold text-foreground-muted uppercase tracking-wider">
@@ -151,7 +161,7 @@ function Sidebar({
                         )}
                     </Link>
                 </div>
-                */}
+                
 
             </nav>
 
@@ -180,12 +190,16 @@ function Sidebar({
                             >
                                 <div className="px-3 py-2 border-b border-black/5 dark:border-white/5 mb-1.5 mx-1">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary font-bold shadow-sm uppercase">
-                                            {user?.email?.[0] || 'U'}
+                                        <div className="w-10 h-10 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary font-bold shadow-sm uppercase overflow-hidden">
+                                            {displayAvatar ? (
+                                                <img src={displayAvatar} alt={displayName} className="w-full h-full object-cover" />
+                                            ) : (
+                                                displayName[0]
+                                            )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-bold text-foreground truncate">{user?.user_metadata?.full_name || 'User'}</p>
-                                            <p className="text-xs text-foreground-secondary truncate font-medium">{user?.email}</p>
+                                            <p className="text-sm font-bold text-foreground truncate">{displayName}</p>
+                                            <p className="text-xs text-foreground-secondary truncate font-medium">{displayEmail}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -231,7 +245,7 @@ function Sidebar({
 
 
                                 <button
-                                    onClick={signOut}
+                                    onClick={() => signOut({ redirectUrl: import.meta.env.VITE_WEBSITE_URL })}
                                     className="w-full flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors rounded-xl"
                                 >
                                     <LogOut className="w-4 h-4" />
@@ -248,12 +262,16 @@ function Sidebar({
                         className={`sidebar-item w-full group relative mb-2 ${isCollapsed ? 'justify-center' : ''} ${isUserMenuOpen ? 'sidebar-item-active' : ''}`}
                         title={isCollapsed ? "My Account" : ""}
                     >
-                        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-border shadow-sm">
-                            <img
-                                src="https://lh3.googleusercontent.com/ogw/AF2bJyh-dG0s0XyX_zX0X0X0X0X0X0X0X0X0X0X0X0=s32-c-mo"
-                                alt="Profile"
-                                className="w-full h-full object-cover"
-                            />
+                        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-border shadow-sm bg-brand-primary/10 flex items-center justify-center text-[10px] font-bold text-brand-primary">
+                            {displayAvatar ? (
+                                <img
+                                    src={displayAvatar}
+                                    alt="Profile"
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                displayName[0]
+                            )}
                         </div>
                         {!isCollapsed && (
                             <span className="font-medium">
@@ -263,13 +281,16 @@ function Sidebar({
                     </button>
                 </div>
 
-                <button
-                    className={`btn-primary w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-brand-primary/25 mt-2 ${isCollapsed ? 'px-0' : 'px-5'}`}
-                    title={isCollapsed ? "Upgrade to Pro" : ""}
-                >
-                    <Crown className="w-5 h-5" />
-                    {!isCollapsed && <span>Upgrade to Pro</span>}
-                </button>
+                {profile?.plan !== 'pro' && (
+                    <button
+                        onClick={openPaywall}
+                        className={`btn-primary w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-brand-primary/25 mt-2 ${isCollapsed ? 'px-0' : 'px-5'}`}
+                        title={isCollapsed ? "Upgrade to Pro" : ""}
+                    >
+                        <Crown className="w-5 h-5" />
+                        {!isCollapsed && <span>Upgrade to Pro</span>}
+                    </button>
+                )}
             </div>
         </aside>
     );

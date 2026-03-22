@@ -1,12 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Mic,
     Send,
     Plus,
-    History,
-    Maximize2,
-    Type,
     Bold,
     Italic,
     Link2,
@@ -18,8 +14,10 @@ import {
     ChevronDown
 } from 'lucide-react';
 
+import { useChat } from '../contexts/ChatContext';
+
 export default function ChatPage() {
-    const [messages, setMessages] = useState<{ id: string, role: string, content: string }[]>([]);
+    const { messages, sendMessage } = useChat();
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -32,31 +30,19 @@ export default function ChatPage() {
         scrollToBottom();
     }, [messages]);
 
-    const handleSendMessage = (e?: React.FormEvent) => {
+    const handleSendMessage = async (e?: React.FormEvent) => {
         e?.preventDefault();
         if (!inputValue.trim()) return;
 
-        const newUserMessage = {
-            id: Date.now().toString(),
-            role: 'user',
-            content: inputValue
-        };
-
-        setMessages(prev => [...prev, newUserMessage]);
+        const content = inputValue;
         setInputValue('');
         setIsTyping(true);
-
-        // Simulate AI response
-        setTimeout(() => {
-            const aiResponse = {
-                id: (Date.now() + 1).toString(),
-                role: 'system',
-                content: `I've analyzed your question. As your study assistant, I recommend focusing on the core principles of "${newUserMessage.content}". Would you like me to generate some practice questions based on this?`
-            };
-            setMessages(prev => [...prev, aiResponse]);
-            setIsTyping(false);
-        }, 1500);
+        
+        await sendMessage(content);
+        
+        setIsTyping(false);
     };
+
 
     return (
         <div className="h-full flex flex-col relative overflow-hidden bg-[#f6f6f6] dark:bg-[#0c0c0d]">

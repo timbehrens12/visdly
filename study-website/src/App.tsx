@@ -314,7 +314,7 @@ function LandingPage() {
           <div className="w-full max-w-2xl h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-6 md:mb-8"></div>
 
           <p className="text-base md:text-lg text-white/90 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed font-normal px-4">
-            visdly lives on your screen to take perfect notes and provide instant answers during your studies, working seamlessly while you learn.
+            Viszmo lives on your screen to take perfect notes and provide instant answers during your studies, working seamlessly while you learn.
           </p>
 
           {/* Get for Windows Button - Centered */}
@@ -612,7 +612,7 @@ function LandingPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-base md:text-lg text-slate-500 mb-10 md:mb-8 max-w-2xl mx-auto leading-relaxed px-4"
             >
-              Join thousands of students using visdly to crush their coursework. Download now and get free access on the house.
+              Join thousands of students using Viszmo to crush their coursework. Download now and get free access on the house.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -634,7 +634,7 @@ function LandingPage() {
                     <svg className="btn-svg" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 30 30" fill="currentColor">
                       <path d="M4 4H14V14H4zM16 4H26V14H16zM4 16H14V26H4zM16 16H26V26H16z"></path>
                     </svg>
-                    <span className="btn-text">{isDownloading ? 'Downloading' : 'Get visdly Free'}</span>
+                    <span className="btn-text">{isDownloading ? 'Downloading' : 'Get Viszmo Free'}</span>
                   </button>
                 </div>
 

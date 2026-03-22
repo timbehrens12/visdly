@@ -112,7 +112,7 @@ export const ProSubscriptionModal = ({ isOpen, onClose }: ProSubscriptionModalPr
                                                     </svg>
                                                 </div>
                                             </div>
-                                            <h2 className="text-3xl font-bold text-slate-900 mb-2">Get visdly Pro</h2>
+                                            <h2 className="text-3xl font-bold text-slate-900 mb-2">Get Viszmo Pro</h2>
                                             <p className="text-slate-500 text-base leading-relaxed">
                                                 Enter your email to receive the download link and get started with your invisible desktop assistant.
                                             </p>

@@ -3,18 +3,18 @@ import { motion } from 'framer-motion';
 const steps = [
   {
     id: '1',
-    title: 'Start visdly',
-    description: 'Simply click Start visdly before your lecture begins.',
+    title: 'Start Viszmo',
+    description: 'Simply click Start Viszmo before your lecture begins.',
   },
   {
     id: '2',
-    title: 'End visdly',
+    title: 'End Viszmo',
     description: "Click the Stop button to end recording. That's it.",
   },
   {
     id: '3',
     title: 'Get shareable notes',
-    description: 'visdly uses what it heard and saw on your screen to generate shareable meeting notes and other study materials.',
+    description: 'Viszmo uses what it heard and saw on your screen to generate shareable meeting notes and other study materials.',
   },
 ];
 

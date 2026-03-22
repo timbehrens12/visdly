@@ -3,9 +3,8 @@ import { Menu, X as XIcon, ChevronDown } from 'lucide-react';
 import { useOS } from '../contexts/OSContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Logo } from './Logo';
-import { useAuth } from '../contexts/AuthContext';
+import { useClerkSession } from '../lib/clerk';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 import { MobileAppModal } from './MobileAppModal';
 
 interface NavbarProps {
@@ -14,7 +13,7 @@ interface NavbarProps {
 
 export const Navbar = ({ onOpenModal = () => { } }: NavbarProps) => {
     const navigate = useNavigate();
-    const { user, session } = useAuth();
+    const { isSignedIn, userName, signOut } = useClerkSession();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [showExploreMenu, setShowExploreMenu] = useState(false);
@@ -32,13 +31,15 @@ export const Navbar = ({ onOpenModal = () => { } }: NavbarProps) => {
     };
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut();
+        await signOut();
         setShowProfileMenu(false);
         navigate('/');
     };
 
+    const dashboardUrl = import.meta.env.VITE_DASHBOARD_URL || 'http://localhost:5174';
+
     return (
-        <nav className="fixed top-0 left-0 right-0 z-[100] flex justify-center pt-4 md:pt-6 px-4" style={{ position: 'fixed', top: 0, left: 0, right: 0 }}>
+        <nav className="fixed top-0 left-0 right-0 z-[100] flex justify-center pt-4 md:pt-6 px-4">
             <div className="glass-navbar w-[95%] md:w-full max-w-7xl mx-auto flex md:grid md:grid-cols-3 gap-8 items-center justify-between px-6 md:px-10 py-3 md:py-4 rounded-full">
                 <a href="/" className="flex items-center justify-center transition-all hover:opacity-80 relative z-10 justify-self-start py-1">
                     <div className="[filter:brightness(0)_saturate(100%)_invert(58%)_sepia(89%)_saturate(1583%)_hue-rotate(169deg)_brightness(98%)_contrast(93%)]">
@@ -83,13 +84,13 @@ export const Navbar = ({ onOpenModal = () => { } }: NavbarProps) => {
 
                 <div className="hidden md:flex items-center gap-6 relative z-10 justify-self-end">
 
-                    {user ? (
+                    {isSignedIn ? (
                         <div className="relative">
                             <button
                                 onClick={() => setShowProfileMenu(!showProfileMenu)}
                                 className="flex items-center gap-1.5 text-sm font-medium text-[#0ea5e9] hover:opacity-80 transition-opacity"
                             >
-                                <span>{user.user_metadata?.full_name || user.email}</span>
+                                <span>{userName || 'Account'}</span>
                                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
                             </button>
 
@@ -107,11 +108,7 @@ export const Navbar = ({ onOpenModal = () => { } }: NavbarProps) => {
                                                 My Account
                                             </a>
                                             <a 
-                                                href={
-                                                    session && (import.meta.env.VITE_DASHBOARD_URL || 'http://localhost:5174').includes('localhost') 
-                                                        ? `${import.meta.env.VITE_DASHBOARD_URL || 'http://localhost:5174'}#access_token=${session.access_token}&refresh_token=${session.refresh_token}&type=recovery`
-                                                        : (import.meta.env.VITE_DASHBOARD_URL ?? '/dashboard')
-                                                } 
+                                                href={dashboardUrl} 
                                                 className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-white/60 rounded-xl transition-colors"
                                             >
                                                 Dashboard
@@ -177,8 +174,10 @@ export const Navbar = ({ onOpenModal = () => { } }: NavbarProps) => {
                     )}
 
                     <div className="btn-wrapper">
-                        <div className="btn-shadow"></div>
-                        <button onClick={onOpenModal} className="btn !py-2.5 !px-6 !text-xs !rounded-full">
+                        <button onClick={onOpenModal} className="btn btn-sm">
+                            <svg className="btn-svg" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 30 30" fill="currentColor">
+                                <path d="M4 4H14V14H4zM16 4H26V14H16zM4 16H14V26H4zM16 16H26V26H16z"></path>
+                            </svg>
                             <span className="btn-text">Get for {isMac ? 'Mac' : 'Windows'}</span>
                         </button>
                     </div>
@@ -217,14 +216,10 @@ export const Navbar = ({ onOpenModal = () => { } }: NavbarProps) => {
                             <a href="/contact" className="block text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">Contact</a>
 
                             <div className="pt-4 flex flex-col gap-4">
-                                {user ? (
+                                {isSignedIn ? (
                                     <>
                                         <a 
-                                            href={
-                                                session && (import.meta.env.VITE_DASHBOARD_URL || 'http://localhost:5174').includes('localhost') 
-                                                    ? `${import.meta.env.VITE_DASHBOARD_URL || 'http://localhost:5174'}#access_token=${session.access_token}&refresh_token=${session.refresh_token}&type=recovery`
-                                                    : (import.meta.env.VITE_DASHBOARD_URL ?? '/dashboard')
-                                            } 
+                                            href={dashboardUrl} 
                                             className="text-center font-bold text-slate-900"
                                         >
                                             Dashboard
@@ -246,9 +241,11 @@ export const Navbar = ({ onOpenModal = () => { } }: NavbarProps) => {
                                     </button>
                                 )}
 
-                                <div className="btn-wrapper w-full">
-                                    <div className="btn-shadow"></div>
-                                    <button onClick={onOpenModal} className="btn w-full !py-4 rounded-2xl">
+                                <div className="btn-wrapper w-full mt-4">
+                                    <button onClick={onOpenModal} className="btn w-full">
+                                        <svg className="btn-svg" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 30 30" fill="currentColor">
+                                            <path d="M4 4H14V14H4zM16 4H26V14H16zM4 16H14V26H4zM16 16H26V26H16z"></path>
+                                        </svg>
                                         <span className="btn-text">Get for {isMac ? 'Mac' : 'Windows'}</span>
                                     </button>
                                 </div>

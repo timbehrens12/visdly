@@ -19,49 +19,61 @@ import NotificationsPage from './pages/NotificationsPage';
 import GeneratePage from './pages/GeneratePage';
 
 
+import { ProfileProvider } from './contexts/ProfileContext';
+import { PaywallProvider } from './contexts/PaywallContext';
+import { ChatProvider } from './contexts/ChatContext';
+import { TranscriptsProvider } from './contexts/TranscriptsContext';
 import { ClerkAuthProvider } from './lib/clerk';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
     <ClerkAuthProvider>
-      <ThemeProvider defaultTheme="system">
-        <SettingsProvider>
-          <StudyProgressProvider>
-            <DebugProvider>
-              <DecksProvider>
-                <SidebarProvider>
-                  <Router>
-                    <ProtectedRoute>
-                      <Layout>
-                        <Routes>
-                          <Route path="/" element={<DashboardPage />} />
-                          <Route path="/flashcards" element={<GamePage initialModeName="Flashcards" />} />
-                          <Route path="/learn" element={<GamePage initialModeName="Learn" />} />
-                          <Route path="/quiz" element={<GamePage initialModeName="Rapid Fire" />} />
-                          <Route path="/match" element={<GamePage initialModeName="Matching" />} />
-                          <Route path="/written" element={<GamePage initialModeName="Written" />} />
-                          <Route path="/speaking" element={<GamePage initialModeName="Speaking Drill" />} />
-                          <Route path="/test" element={<GamePage initialModeName="Practice Test" />} />
-                          <Route path="/canvas" element={<CanvasPage />} />
-                          <Route path="/transcripts" element={<TranscriptPage />} />
-                          <Route path="/decks" element={<MyDecksPage />} />
-                          <Route path="/edit-deck" element={<EditDeckPage />} />
-                          <Route path="/edit-deck/:deckId" element={<EditDeckPage />} />
-                          <Route path="/chat" element={<ChatPage />} />
-                          <Route path="/summarizers" element={<SummarizersPage />} />
-                          <Route path="/notifications" element={<NotificationsPage />} />
-                          <Route path="/generate" element={<GeneratePage />} />
-                        </Routes>
-                      </Layout>
-                    </ProtectedRoute>
-                  </Router>
-                </SidebarProvider>
-              </DecksProvider>
-            </DebugProvider>
-          </StudyProgressProvider>
-        </SettingsProvider>
-      </ThemeProvider>
+      <ProfileProvider>
+        <ChatProvider>
+          <TranscriptsProvider>
+            <ThemeProvider defaultTheme="system">
+              <PaywallProvider>
+                <SettingsProvider>
+                  <StudyProgressProvider>
+                    <DebugProvider>
+                      <DecksProvider>
+                        <SidebarProvider>
+                          <Router>
+                            <ProtectedRoute>
+                              <Layout>
+                                <Routes>
+                                  <Route path="/" element={<DashboardPage />} />
+                                  <Route path="/flashcards" element={<GamePage initialModeName="Flashcards" />} />
+                                  <Route path="/learn" element={<GamePage initialModeName="Learn" />} />
+                                  <Route path="/quiz" element={<GamePage initialModeName="Rapid Fire" />} />
+                                  <Route path="/match" element={<GamePage initialModeName="Matching" />} />
+                                  <Route path="/written" element={<GamePage initialModeName="Written" />} />
+                                  <Route path="/speaking" element={<GamePage initialModeName="Speaking Drill" />} />
+                                  <Route path="/test" element={<GamePage initialModeName="Practice Test" />} />
+                                  <Route path="/canvas" element={<CanvasPage />} />
+                                  <Route path="/transcripts" element={<TranscriptPage />} />
+                                  <Route path="/decks" element={<MyDecksPage />} />
+                                  <Route path="/edit-deck" element={<EditDeckPage />} />
+                                  <Route path="/edit-deck/:deckId" element={<EditDeckPage />} />
+                                  <Route path="/chat" element={<ChatPage />} />
+                                  <Route path="/summarizers" element={<SummarizersPage />} />
+                                  <Route path="/notifications" element={<NotificationsPage />} />
+                                  <Route path="/generate/:method" element={<GeneratePage />} />
+                                </Routes>
+                              </Layout>
+                            </ProtectedRoute>
+                          </Router>
+                        </SidebarProvider>
+                      </DecksProvider>
+                    </DebugProvider>
+                  </StudyProgressProvider>
+                </SettingsProvider>
+              </PaywallProvider>
+            </ThemeProvider>
+          </TranscriptsProvider>
+        </ChatProvider>
+      </ProfileProvider>
     </ClerkAuthProvider>
   );
 }

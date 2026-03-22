@@ -20,7 +20,7 @@ interface TestGameProps {
         similarityThreshold: number;
         [key: string]: any;
     };
-    cards: Array<{ term: string, definition: string, case?: string, id: number }>;
+    cards: Array<{ term: string, definition: string, case?: string, id: string }>;
 }
 
 type QuestionType = 'case' | 'written' | 'mcq' | 'flashcard' | 'tf' | 'matching';

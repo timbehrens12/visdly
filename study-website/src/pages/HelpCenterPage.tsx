@@ -9,7 +9,7 @@ export const HelpCenterPage = () => {
     return (
         <StaticPageLayout
             title="How can we help?"
-            subtitle="Find answers to common questions, learn how to use visdly, and get support when you need it."
+            subtitle="Find answers to common questions, learn how to use Viszmo, and get support when you need it."
         >
 
 
@@ -21,7 +21,7 @@ export const HelpCenterPage = () => {
                     </div>
                     <div className="group inline-block bg-[#0ea5e9] shadow-[#0ea5e9]/20 -skew-x-12 px-4 py-1.5 shadow-md transform transition-all duration-300 hover:skew-x-0 hover:scale-105 mb-2">
                         <h3 className="text-sm font-black text-white uppercase tracking-wider transform skew-x-12 transition-all duration-300 group-hover:skew-x-0 whitespace-nowrap">
-                            Download visdly
+                            Download Viszmo
                         </h3>
                     </div>
                     <p className="text-xs text-slate-500 font-medium mt-2">Get started for free</p>
@@ -35,7 +35,7 @@ export const HelpCenterPage = () => {
                             View Features
                         </h3>
                     </div>
-                    <p className="text-xs text-slate-500 font-medium mt-2">See what visdly can do</p>
+                    <p className="text-xs text-slate-500 font-medium mt-2">See what Viszmo can do</p>
                 </div>
                 <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100/50 hover:bg-white hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-500/5 transition-all group text-center cursor-pointer">
                     <div className="mx-auto text-emerald-500 mb-6 group-hover:scale-110 transition-transform">
@@ -71,16 +71,16 @@ export const HelpCenterPage = () => {
                         </div>
                         <div className="space-y-4">
                             <AccordionArticle
-                                title="How do I download and install visdly?"
+                                title="How do I download and install Viszmo?"
                                 text={`Visit our homepage and click "Download Free". Run the installer—${!isMac ? 'Windows' : 'macOS'} may show a warning since we don&apos;t have a code signing certificate yet. Click "More info" then "Run anyway" (or "Open anyway" on Mac) to proceed.`}
                             />
                             <AccordionArticle
                                 title="How do I use the AI Overlay?"
-                                text='After installing, launch visdly from your dashboard by clicking "Start Session". The overlay will appear on your screen. Click "Scan" to capture any area—the AI will analyze it and give you an answer with explanation. Use the chat for follow-up questions to deepen your understanding.'
+                                text='After installing, launch Viszmo from your dashboard by clicking "Start Session". The overlay will appear on your screen. Click "Scan" to capture any area—the AI will analyze it and give you an answer with explanation. Use the chat for follow-up questions to deepen your understanding.'
                             />
                             <AccordionArticle
-                                title="What can I use visdly for?"
-                                text="visdly is perfect for homework, studying, coding help, and any situation where you need quick AI assistance. It's designed to be your ultimate study companion for any subject."
+                                title="What can I use Viszmo for?"
+                                text="Viszmo is perfect for homework, studying, coding help, and any situation where you need quick AI assistance. It's designed to be your ultimate study companion for any subject."
                             />
                             <AccordionArticle
                                 title="Is there a free version?"
@@ -114,7 +114,7 @@ export const HelpCenterPage = () => {
                             />
                             <AccordionArticle
                                 title="Why can't I see the overlay?"
-                                text='Make sure visdly is running—check your system tray for the icon. Try clicking "Start Session" from the dashboard. If using multiple monitors, check which display the overlay is on.'
+                                text='Make sure Viszmo is running—check your system tray for the icon. Try clicking "Start Session" from the dashboard. If using multiple monitors, check which display the overlay is on.'
                             />
 
                         </div>
@@ -171,7 +171,7 @@ export const HelpCenterPage = () => {
                         <div className="space-y-4">
                             <AccordionArticle
                                 title="The app won't start or crashes"
-                                text="Try restarting your computer. Make sure you have the latest version installed. If the problem persists, uninstall and reinstall visdly from the download page."
+                                text="Try restarting your computer. Make sure you have the latest version installed. If the problem persists, uninstall and reinstall Viszmo from the download page."
                             />
                             <AccordionArticle
                                 title='I&apos;m not getting AI responses'
@@ -182,8 +182,8 @@ export const HelpCenterPage = () => {
                                 text="Settings usually update within a few minutes. Try refreshing the page or restarting the app. If they still don't appear after 10 minutes, contact support."
                             />
                             <AccordionArticle
-                                title="How do I reopen visdly after closing it?"
-                                text={`Search for "visdly" in your ${isMac ? 'Applications folder or Spotlight' : 'Windows search bar'} and launch it.`}
+                                title="How do I reopen Viszmo after closing it?"
+                                text={`Search for "Viszmo" in your ${isMac ? 'Applications folder or Spotlight' : 'Windows search bar'} and launch it.`}
                             />
                         </div>
                     </div>

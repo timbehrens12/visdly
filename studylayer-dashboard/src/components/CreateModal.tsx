@@ -42,8 +42,8 @@ export function CreateModal({ isOpen, onClose }: CreateModalProps) {
         return () => document.removeEventListener('keydown', handleEscape);
     }, [isOpen, onClose]);
 
-    const handleCreateManual = () => {
-        const newDeckId = createDeck('Untitled Deck');
+    const handleCreateManual = async () => {
+        const newDeckId = await createDeck('Untitled Deck');
         setActiveDeck(newDeckId);
         onClose();
         navigate(`/edit-deck/${newDeckId}`);
@@ -54,65 +54,64 @@ export function CreateModal({ isOpen, onClose }: CreateModalProps) {
             title: 'Upload',
             description: 'Upload notes, papers and PDFs.',
             image: '/dashimages/icons/upload.png',
-            badge: 'Popular',
             bgColor: 'bg-blue-500/10',
-            onClick: () => { navigate('/generate?method=upload'); onClose(); }
+            onClick: () => { navigate('/generate/upload'); onClose(); }
         },
         {
             title: 'Record',
             description: 'Record a lecture or upload an audio file.',
             image: '/dashimages/icons/voice.png',
             bgColor: 'bg-purple-500/10',
-            onClick: () => { navigate('/generate?method=record'); onClose(); }
+            onClick: () => { navigate('/generate/record'); onClose(); }
         },
         {
             title: 'Import',
             description: 'Import existing questions from a file.',
-            image: '/dashimages/icons/folder.png',
+            image: '/dashimages/icons/inbox.png',
             bgColor: 'bg-amber-500/10',
-            onClick: () => { navigate('/generate?method=subject'); onClose(); }
+            onClick: () => { navigate('/generate/import'); onClose(); }
         },
         {
             title: 'Text',
             description: 'Type out or paste your notes.',
-            image: '/dashimages/icons/book.png',
+            image: '/dashimages/icons/size.png',
             bgColor: 'bg-zinc-500/10',
-            onClick: () => { navigate('/generate?method=text'); onClose(); }
+            onClick: () => { navigate('/generate/text'); onClose(); }
         },
         {
             title: 'Subject',
             description: 'Enter a topic you want to study.',
-            image: '/dashimages/icons/vocab.png',
+            image: '/dashimages/icons/book.png',
             bgColor: 'bg-pink-500/10',
-            onClick: () => { navigate('/generate?method=subject'); onClose(); }
+            onClick: () => { navigate('/generate/subject'); onClose(); }
         },
         {
             title: 'Link',
             description: 'Enter a link to generate from.',
             image: '/dashimages/icons/link.png.png',
             bgColor: 'bg-emerald-500/10',
-            onClick: () => { navigate('/generate?method=link'); onClose(); }
+            onClick: () => { navigate('/generate/link'); onClose(); }
         },
         {
             title: 'YouTube Link',
             description: 'Enter a YouTube URL to generate from.',
             image: '/dashimages/icons/youtube.png',
             bgColor: 'bg-red-500/10',
-            onClick: () => { navigate('/generate?method=youtube'); onClose(); }
+            onClick: () => { navigate('/generate/youtube'); onClose(); }
         },
         {
             title: 'Anki',
             description: 'Import flashcards from Anki.',
             image: '/dashimages/icons/effects.png',
             bgColor: 'bg-sky-500/10',
-            onClick: () => { navigate('/generate?method=anki'); onClose(); }
+            onClick: () => { navigate('/generate/anki'); onClose(); }
         },
         {
             title: 'Quizlet Set',
             description: 'Import flashcards from a Quizlet set.',
             image: '/dashimages/icons/quizlet.png',
             bgColor: 'bg-indigo-500/10',
-            onClick: () => { navigate('/generate?method=quizlet'); onClose(); }
+            onClick: () => { navigate('/generate/quizlet'); onClose(); }
         },
         {
             title: 'Manual',
@@ -139,7 +138,7 @@ export function CreateModal({ isOpen, onClose }: CreateModalProps) {
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="w-full max-w-4xl bg-surface rounded-[2rem] border border-border shadow-2xl overflow-hidden relative z-10 flex flex-col p-8 md:p-12 items-center"
+                        className="w-full max-w-4xl bg-surface rounded-3xl border border-border shadow-2xl overflow-hidden relative z-10 flex flex-col p-8 items-center"
                     >
                         <button
                             onClick={onClose}
@@ -149,8 +148,8 @@ export function CreateModal({ isOpen, onClose }: CreateModalProps) {
                         </button>
 
                         <div className="text-center mb-10">
-                            <h2 className="text-4xl font-bold text-foreground mb-3">Generate</h2>
-                            <p className="text-foreground-secondary text-lg">Start by choosing your input method below:</p>
+                            <h2 className="text-2xl font-black text-foreground mb-2">Generate</h2>
+                            <p className="text-foreground-secondary text-sm font-medium">Choose an input method:</p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl">
@@ -177,14 +176,9 @@ export function CreateModal({ isOpen, onClose }: CreateModalProps) {
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-0.5">
-                                            <span className="text-lg font-bold text-foreground group-hover:text-brand-primary transition-colors">
+                                            <span className="text-base font-bold text-foreground group-hover:text-brand-primary transition-colors">
                                                 {option.title}
                                             </span>
-                                            {option.badge && (
-                                                <span className="px-2 py-0.5 rounded-md bg-orange-500/10 text-orange-500 text-[10px] font-bold uppercase tracking-wider">
-                                                    {option.badge}
-                                                </span>
-                                            )}
                                         </div>
                                         <p className="text-foreground-secondary text-sm font-medium leading-tight line-clamp-1">
                                             {option.description}

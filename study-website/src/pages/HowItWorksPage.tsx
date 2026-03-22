@@ -15,7 +15,7 @@ export const HowItWorksPage = () => {
         {
             icon: <Download className="w-10 h-10 text-blue-500" />,
             title: "Download & Install",
-            text: "Get visdly for your device. Installation takes less than a minute. Create an account to receive free access—no credit card required!",
+            text: "Get Viszmo for your device. Installation takes less than a minute. Create an account to receive free access—no credit card required!",
             highlightColor: "bg-blue-500 shadow-blue-500/20"
         },
         {
@@ -88,7 +88,7 @@ export const HowItWorksPage = () => {
                         className="max-w-4xl mx-auto"
                     >
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
-                            How <span className="text-[#0ea5e9]">visdly Works</span>
+                            How <span className="text-[#0ea5e9]">Viszmo Works</span>
                         </h1>
                         <p className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">
                             Get started in minutes. Here's everything you need to know.
@@ -156,7 +156,7 @@ export const HowItWorksPage = () => {
                                     </div>
 
                                     <p className="text-blue-50 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto font-medium opacity-90">
-                                        Never miss a detail. Use visdly to record your lectures and meetings. Our AI automatically generates perfect summaries, extracts key terms, and organizes your notes so you can focus on learning.
+                                        Never miss a detail. Use Viszmo to record your lectures and meetings. Our AI automatically generates perfect summaries, extracts key terms, and organizes your notes so you can focus on learning.
                                     </p>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@ export const HowItWorksPage = () => {
                     <section>
                         <div className="text-center mb-16">
                             <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">Quick Tips</h2>
-                            <p className="text-slate-500 text-lg">Master visdly in seconds.</p>
+                            <p className="text-slate-500 text-lg">Master Viszmo in seconds.</p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -197,7 +197,7 @@ export const HowItWorksPage = () => {
                             Ready to get started?
                         </h2>
                         <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
-                            Join thousands of students using visdly to crush their coursework. Download now and get free access on the house.
+                            Join thousands of students using Viszmo to crush their coursework. Download now and get free access on the house.
                         </p>
                         <div className="flex flex-col items-center gap-6 pt-4">
                             <div className="flex flex-col sm:flex-row items-center gap-4">

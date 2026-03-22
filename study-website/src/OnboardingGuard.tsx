@@ -1,11 +1,22 @@
-import { useAuth } from './contexts/AuthContext';
+import { useProfile } from './contexts/ProfileContext';
+import { useClerkSession } from './lib/clerk';
 import { OnboardingModal } from './components/OnboardingModal';
+import { type ReactNode } from 'react';
 
-export const OnboardingGuard = ({ children }: { children: React.ReactNode }) => {
-    const { user, profile, refreshProfile } = useAuth();
+interface OnboardingGuardProps {
+    children: ReactNode;
+}
+
+export function OnboardingGuard({ children }: OnboardingGuardProps) {
+    const { isSignedIn } = useClerkSession();
+    const { profile, refreshProfile, loading } = useProfile();
 
     // Show onboarding if logged in but not completed
-    const showOnboarding = user && profile && !profile.onboarding_completed;
+    const showOnboarding = isSignedIn && profile && !profile.onboarding_completed;
+
+    if (loading) {
+        return null; // Or a subtle loading spinner
+    }
 
     return (
         <>
@@ -18,4 +29,4 @@ export const OnboardingGuard = ({ children }: { children: React.ReactNode }) => 
             )}
         </>
     );
-};
+}

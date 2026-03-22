@@ -23,7 +23,7 @@ export const Footer = ({ onOpenModal = () => { } }: FooterProps) => {
                             <Logo size={32} variant="full" className="brightness-0 opacity-90" />
                         </a>
                         <p className="text-slate-500 text-sm leading-relaxed max-w-sm">
-                            The AI study sidekick for students. visdly lives on your screen while you study, providing instant assistance and perfect notes without breaking your flow.
+                            The AI study sidekick for students. Viszmo lives on your screen while you study, providing instant assistance and perfect notes without breaking your flow.
                         </p>
 
                         {/* Social Icons */}
@@ -106,7 +106,7 @@ export const Footer = ({ onOpenModal = () => { } }: FooterProps) => {
                                 <li><a href="/privacy" className="hover:text-[#0ea5e9] transition-colors">Privacy Policy</a></li>
                                 <li><a href="/terms" className="hover:text-[#0ea5e9] transition-colors">Terms of Service</a></li>
                                 <li><a href="/contact" className="hover:text-[#0ea5e9] transition-colors">Contact Support</a></li>
-                                <li><a href="mailto:support@visdly.com" className="hover:text-[#0ea5e9] transition-colors">support@visdly.com</a></li>
+                                <li><a href="mailto:support@viszmo.com" className="hover:text-[#0ea5e9] transition-colors">support@viszmo.com</a></li>
                             </ul>
                         </div>
                     </div>
@@ -115,7 +115,7 @@ export const Footer = ({ onOpenModal = () => { } }: FooterProps) => {
                 {/* Bottom Bar */}
                 <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-slate-500 text-sm">
-                        © {currentYear} visdly AI. All rights reserved.
+                        © {currentYear} Viszmo AI. All rights reserved.
                     </p>
 
                     <div className="flex items-center gap-6">

@@ -42,7 +42,7 @@ export const UndetectableSection = () => {
             Works seamlessly with <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500">your existing tools</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
-            visdly is designed to work alongside the platforms you already use, providing assistance when you need it most.
+            Viszmo is designed to work alongside the platforms you already use, providing assistance when you need it most.
           </p>
         </motion.div>
 
@@ -161,7 +161,7 @@ export const UndetectableSection = () => {
           className="mt-12 text-center"
         >
           <p className="text-sm text-gray-500 italic max-w-3xl mx-auto">
-            visdly is a study assistance tool designed to help students learn more effectively.
+            Viszmo is a study assistance tool designed to help students learn more effectively.
             We encourage responsible use and compliance with your institution's academic policies.
           </p>
         </motion.div>

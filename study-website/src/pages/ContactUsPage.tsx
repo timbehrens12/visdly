@@ -20,8 +20,8 @@ export const ContactUsPage = () => {
                             <div>
                                 <h4 className="font-bold text-slate-900 text-base">Email Support</h4>
                                 <p className="text-sm text-slate-400 italic mb-1">Fastest way to get help</p>
-                                <a href="mailto:support@visdly.com" className="block text-lg font-black text-[#0ea5e9] hover:underline mb-1">
-                                    support@visdly.com
+                                <a href="mailto:support@viszmo.com" className="block text-lg font-black text-[#0ea5e9] hover:underline mb-1">
+                                    support@viszmo.com
                                 </a>
                                 <p className="text-sm text-slate-500 leading-relaxed">
                                     Please email us directly for any inquiries.
@@ -52,7 +52,7 @@ export const ContactUsPage = () => {
                     <h3 className="text-xl font-black text-slate-900">Common Questions</h3>
 
                     <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                        <h4 className="font-bold text-slate-900 mb-2">How do I install visdly?</h4>
+                        <h4 className="font-bold text-slate-900 mb-2">How do I install Viszmo?</h4>
                         <p className="text-slate-500 text-sm leading-relaxed">
                             Download the installer for {isMac ? 'macOS' : 'Windows'} from our home page and follow the setup guide. It takes less than a minute.
                         </p>
@@ -63,14 +63,14 @@ export const ContactUsPage = () => {
                     <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                         <h4 className="font-bold text-slate-900 mb-2">Does this work on both {isMac ? 'Mac and Windows' : 'Windows and Mac'}?</h4>
                         <p className="text-slate-500 text-sm leading-relaxed">
-                            Yes! visdly is designed to be your ultimate study sidekick across platforms. {isMac ? 'We are currently optimizing the Mac experience' : 'Mac support is being rolled out now'}.
+                            Yes! Viszmo is designed to be your ultimate study sidekick across platforms. {isMac ? 'We are currently optimizing the Mac experience' : 'Mac support is being rolled out now'}.
                         </p>
                     </div>
 
                     <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                         <h4 className="font-bold text-slate-900 mb-2">Can I generate custom study materials?</h4>
                         <p className="text-slate-500 text-sm leading-relaxed">
-                            Absolutely. visdly can generate flashcards, quizzes, and study guides from any content you scan or upload.
+                            Absolutely. Viszmo can generate flashcards, quizzes, and study guides from any content you scan or upload.
                         </p>
                     </div>
                 </div>

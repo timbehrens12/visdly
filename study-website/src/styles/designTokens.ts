@@ -1,5 +1,5 @@
 /**
- * StudyLayer Design Tokens
+ * Viszmo Design Tokens
  * Centralized design system constants for consistent styling across the application.
  */
 

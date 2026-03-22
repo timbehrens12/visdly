@@ -13,7 +13,7 @@ interface RapidFireQuizProps {
         cardLimit: number;
         showStreakFx?: boolean;
     };
-    cards: Array<{ term: string, definition: string, case?: string, id: number }>;
+    cards: Array<{ term: string, definition: string, case?: string, id: string }>;
 }
 
 export function RapidFireQuiz({ settings, cards }: RapidFireQuizProps) {

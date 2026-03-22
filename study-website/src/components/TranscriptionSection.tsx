@@ -25,9 +25,9 @@ export const TranscriptionSection = () => {
                 <div className="text-xs text-gray-400 font-medium tracking-wide uppercase">Monday, Nov 18</div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-6 h-6 rounded-full bg-indigo-500/40 border border-white/10 flex items-center justify-center text-[8px] font-bold">PS</div>
-                  <div className="w-6 h-6 rounded-full bg-blue-500/40 border border-white/10 -ml-2 flex items-center justify-center text-[8px] font-bold">VS</div>
+                  <div className="w-6 h-6 rounded-full bg-blue-500/40 border border-white/10 -ml-2 flex items-center justify-center text-[8px] font-bold">VZ</div>
                   <div className="w-6 h-6 rounded-full bg-emerald-500/40 border border-white/10 -ml-2"></div>
-                  <span className="text-[10px] text-gray-400 ml-1.5 font-medium">Prof. Smith, visdly, +25</span>
+                  <span className="text-[10px] text-gray-400 ml-1.5 font-medium">Prof. Smith, Viszmo, +25</span>
                 </div>
               </div>
 
@@ -68,11 +68,11 @@ export const TranscriptionSection = () => {
 
                 <div className="flex gap-3">
                   <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex-shrink-0 flex items-center justify-center border border-indigo-500/30">
-                    <span className="text-[10px] font-bold text-indigo-300">VS</span>
+                    <span className="text-[10px] font-bold text-indigo-300">VZ</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-bold text-indigo-300">visdly</span>
+                      <span className="text-sm font-bold text-indigo-300">Viszmo</span>
                       <span className="text-[10px] text-gray-500 font-medium">2:15 PM</span>
                     </div>
                     <p className="text-sm text-gray-300 leading-relaxed bg-white/5 p-3 rounded-2xl rounded-tl-none border border-white/5">
@@ -98,11 +98,11 @@ export const TranscriptionSection = () => {
 
                 <div className="flex gap-3">
                   <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex-shrink-0 flex items-center justify-center border border-indigo-500/30">
-                    <span className="text-[10px] font-bold text-indigo-300">VS</span>
+                    <span className="text-[10px] font-bold text-indigo-300">VZ</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-bold text-indigo-300">visdly</span>
+                      <span className="text-sm font-bold text-indigo-300">Viszmo</span>
                       <span className="text-[10px] text-gray-500 font-medium">2:18 PM</span>
                     </div>
                     <p className="text-sm text-gray-300 leading-relaxed bg-white/5 p-3 rounded-2xl rounded-tl-none border border-white/5">

@@ -4,6 +4,9 @@ import { PenTool, Move, Undo, Trash2, Minus, Plus, Eraser, ChevronLeft } from 'l
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar } from '../contexts/SidebarContext';
+import { useProfile } from '../contexts/ProfileContext';
+import { FadeInUp } from './ui/MotionWrapper';
+import { CheckCircle2, Layout as LayoutIcon } from 'lucide-react';
 
 interface Stroke {
     points: { x: number; y: number }[];
@@ -160,10 +163,6 @@ export function CanvasMode() {
         ctx.restore();
     };
 
-    const handleBack = () => {
-        setHideSidebar(false); // Ensure sidebar is shown when leaving
-        navigate('/');
-    };
 
     return (
         <div className="flex flex-col h-full w-full relative bg-background overflow-hidden">

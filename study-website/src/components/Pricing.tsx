@@ -105,7 +105,7 @@ export const Pricing = () => {
                         <span>Start</span>
                         <img
                             src="/teamlogos/pricinglogo.png"
-                            alt="visdly"
+                            alt="Viszmo"
                             className="h-10 sm:h-14 md:h-20 lg:h-24 w-auto object-contain drop-shadow-lg"
                         />
                         <span>for <span className="text-[#0ea5e9]">free.</span></span>

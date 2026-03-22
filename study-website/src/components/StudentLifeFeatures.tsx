@@ -62,10 +62,10 @@ export const StudentLifeFeatures = () => {
                     >
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tight">
                             Build better study habits <br />
-                            <span className="text-[#0ea5e9]">with visdly AI</span>
+                            <span className="text-[#0ea5e9]">with Viszmo AI</span>
                         </h2>
                         <p className="text-lg text-slate-500 max-w-2xl leading-relaxed">
-                            visdly enhances every part of your academic journey, from lectures to exams.
+                            Viszmo enhances every part of your academic journey, from lectures to exams.
                         </p>
                     </motion.div>
                 </div>
@@ -129,7 +129,7 @@ export const StudentLifeFeatures = () => {
                                 </div>
                                 <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">Auto-Pilot Guides</h3>
                                 <p className="text-slate-500 text-sm leading-relaxed font-medium">
-                                    Upload any PDF, link, or text. visdly instantly creates summaries, flashcards, quizzes, and test prep materials.
+                                    Upload any PDF, link, or text. Viszmo instantly creates summaries, flashcards, quizzes, and test prep materials.
                                 </p>
                             </div>
                         </div>

@@ -22,7 +22,7 @@ export const NewUserPopup = ({ forceOpen = false }: NewUserPopupProps) => {
 
     const handleClose = () => {
         setIsOpen(false);
-        localStorage.setItem('visdly_new_user_popup_seen', 'true');
+        localStorage.setItem('viszmo_new_user_popup_seen', 'true');
     };
 
     const handleClaim = () => {
@@ -87,7 +87,7 @@ export const NewUserPopup = ({ forceOpen = false }: NewUserPopupProps) => {
                                 <div className="w-[88px] h-[88px] bg-white rounded-[28px] shadow-[0_12px_24px_-8px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] flex items-center justify-center relative z-10">
                                     <img
                                         src="/favicon-32x32.png.png"
-                                        alt="visdly"
+                                        alt="Viszmo"
                                         className="w-11 h-11 object-contain"
                                     />
                                     {/* Inner shine */}
@@ -109,7 +109,7 @@ export const NewUserPopup = ({ forceOpen = false }: NewUserPopupProps) => {
                                 </h2>
 
                                 <p className="text-slate-500 text-[15px] leading-relaxed mb-8">
-                                    Join thousands of students using visdly.<br />
+                                    Join thousands of students using Viszmo.<br />
                                     Sign up today and get <span className="font-bold text-[#0ea5e9] bg-sky-50 px-1 rounded">Bonus Messages</span> instantly!
                                 </p>
                             </motion.div>

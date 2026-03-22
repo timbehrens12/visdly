@@ -12,7 +12,7 @@ export const Logo = ({ className = '', size = 32, showText = false, variant = 'i
     <div className={`flex items-center ${className}`}>
       <img
         src={logoSrc}
-        alt="visdly"
+        alt="Viszmo"
         style={{
           height: `${size}px`,
           width: 'auto', // Allow width to scale naturally
@@ -21,7 +21,7 @@ export const Logo = ({ className = '', size = 32, showText = false, variant = 'i
         className="flex-shrink-0"
       />
       {showText && variant !== 'full' && (
-        <span className="font-semibold text-lg tracking-tight ml-2">visdly</span>
+        <span className="font-semibold text-lg tracking-tight ml-2">Viszmo</span>
       )}
     </div>
   );

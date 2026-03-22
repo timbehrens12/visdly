@@ -5,7 +5,7 @@ const testimonials = [
         name: "Alex M.",
         role: "CS Major",
         school: "U of Toronto",
-        content: "visdly basically saved my GPA. The transcription is insane—it catches everything my prof mumbles.",
+        content: "Viszmo basically saved my GPA. The transcription is insane—it catches everything my prof mumbles.",
         rotation: "rotate-1"
     },
     {

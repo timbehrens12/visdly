@@ -1,246 +1,143 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, BookOpen, Sparkles, Flame, Sun, Moon, Bell, Layers, FileText } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Plus, BookOpen, Clock, FileText, Sparkles, Layers, Flame } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { FadeInUp } from '../components/ui/MotionWrapper';
+import { useDecks, type Deck } from '../contexts/DecksContext';
+import { useStudyProgress } from '../contexts/StudyProgressContext';
+import { useClerkSession } from '../lib/clerk';
 import { CreateModal } from '../components/CreateModal';
 import { CreateFolderModal } from '../components/CreateFolderModal';
-import { RecentDeckCard } from '../components/ui/RecentDeckCard';
-import { useDecks } from '../contexts/DecksContext';
-import { useTheme } from '../contexts/ThemeContext';
-import { useClerkSession } from '../lib/clerk';
+
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+};
+
+const staggerItem = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+};
+
+interface RecentDeckCardProps {
+    deck: Deck;
+    stats: { averageMastery: number };
+    handleDeckClick: (id: string) => void;
+    formatLastStudied: (date?: string) => string;
+}
+
+const RecentDeckCard = ({ deck, stats, handleDeckClick, formatLastStudied }: RecentDeckCardProps) => (
+    <motion.div
+        variants={staggerItem}
+        onClick={() => handleDeckClick(deck.id)}
+        className="group bg-surface border border-border hover:border-border-strong hover:bg-surface-hover transition-all cursor-pointer rounded-[2rem] p-6 relative overflow-hidden flex flex-col h-full"
+    >
+        <div className="flex items-center justify-between mb-4">
+            <div className={`p-3 rounded-2xl ${deck.color?.startsWith('bg-') ? deck.color : 'bg-brand-primary'}/10 ${deck.color?.startsWith('bg-') ? deck.color.replace('bg-', 'text-') : 'text-brand-primary'} group-hover:scale-110 transition-transform`}>
+                <BookOpen className="w-6 h-6" />
+            </div>
+            <div className="flex -space-x-2">
+                {[1, 2, 3].map((i) => (
+                    <div key={i} className="w-8 h-8 rounded-full border-2 border-surface bg-background-elevated flex items-center justify-center text-[10px] font-bold text-foreground-muted">
+                        {i === 3 ? '+' : ''}
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <h3 className="font-bold text-foreground text-lg mb-2 group-hover:text-brand-primary transition-colors line-clamp-1">
+            {deck.title}
+        </h3>
+
+        <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-xs font-bold text-foreground-secondary">{deck.cards.length} cards</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-foreground-muted" />
+                <span className="text-xs font-medium text-foreground-muted">{formatLastStudied(deck.lastStudied)}</span>
+            </div>
+        </div>
+
+        <div className="mt-auto space-y-3">
+            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-foreground-muted">
+                <span>Mastery</span>
+                <span>{stats.averageMastery}%</span>
+            </div>
+            <div className="h-2 bg-background-elevated rounded-full overflow-hidden border border-border">
+                <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${stats.averageMastery}%` }}
+                    className="h-full bg-brand-primary"
+                />
+            </div>
+        </div>
+    </motion.div>
+);
 
 export default function DashboardPage() {
-    const navigate = useNavigate();
-    const { userName, signOut } = useClerkSession();
+    const { userName } = useClerkSession();
     const {
         createFolder,
-        getActiveDecks,
-        setActiveDeck
+        recentDecks
     } = useDecks();
-    const { resolvedTheme, toggleTheme } = useTheme();
-    const { getStreak, getDeckStats } = useStudyProgress();
 
+    const { getDeckStats, getStreak } = useStudyProgress();
+    const navigate = useNavigate();
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
-    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-    const [isStreakMenuOpen, setIsStreakMenuOpen] = useState(false);
 
-    const displayName = userName || "Kortez";
-    const streak = getStreak();
-
-    // Get recent decks
-    const activeDecks = getActiveDecks();
-    // const totalCards = activeDecks.reduce((sum, deck) => sum + deck.cards.length, 0); // Unused for now
-
-    const recentDecks = activeDecks
-        .sort((a, b) => {
-            const dateA = new Date(a.lastStudied || a.createdAt).getTime();
-            const dateB = new Date(b.lastStudied || b.createdAt).getTime();
-            return dateB - dateA;
-        })
-        .slice(0, 4); // Increased to 4 to fit grid better on responsive
-
-    const handleDeckClick = (deckId: string) => {
-        setActiveDeck(deckId);
-        navigate('/flashcards');
+    const formatLastStudied = (date?: string) => {
+        if (!date) return 'Never studied';
+        const d = new Date(date);
+        const now = new Date();
+        const diffMins = Math.floor((now.getTime() - d.getTime()) / (1000 * 60));
+        if (diffMins < 60) return `${diffMins}m ago`;
+        const diffHours = Math.floor(diffMins / 60);
+        if (diffHours < 24) return `${diffHours}h ago`;
+        const diffDays = Math.floor(diffHours / 24);
+        return `${diffDays}d ago`;
     };
 
-    const formatLastStudied = (lastStudied?: string) => {
-        if (!lastStudied) return 'Never';
-        const date = new Date(lastStudied);
-        const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
-        const diffMins = Math.floor(diffMs / 60000);
-        const diffHours = Math.floor(diffMins / 60);
-        const diffDays = Math.floor(diffHours / 24);
-
-        if (diffMins < 1) return 'Just now';
-        if (diffMins < 60) return `${diffMins}m ago`;
-        if (diffHours < 24) return `${diffHours}h ago`;
-        if (diffDays < 7) return `${diffDays}d ago`;
-        return date.toLocaleDateString();
+    const handleDeckClick = (deckId: string) => {
+        navigate(`/edit-deck/${deckId}`);
     };
 
     return (
-        <div className="p-8 max-w-7xl mx-auto min-h-screen" onClick={() => {
-            setIsNotificationOpen(false);
-            setIsStreakMenuOpen(false);
-        }}>
-            {/* Header Row */}
-            <div className="flex items-center justify-between mb-12">
-                <FadeInUp>
-                    <h1 className="text-3xl font-bold text-foreground">
-                        Welcome, {username}
+        <div className="max-w-7xl mx-auto px-6 py-6 lg:py-10">
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                <div className="space-y-1">
+                    <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
+                        Welcome back, <span className="text-brand-primary">{userName?.split(' ')[0] || 'Scholar'}</span>!
                     </h1>
-                </FadeInUp>
+                </div>
 
-                {/* Mini Utility Container */}
-                <div className="flex items-center gap-2 p-1.5 bg-surface/50 backdrop-blur-md border border-border rounded-2xl shadow-sm relative z-20">
-                    {/* Theme Toggle */}
-                    <motion.button
-                        whileHover={{ backgroundColor: 'rgba(var(--brand-primary), 0.1)' }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={toggleTheme}
-                        className="w-10 h-10 flex items-center justify-center rounded-xl text-foreground-muted hover:text-foreground transition-colors"
-                        title="Toggle Theme"
-                    >
-                        {resolvedTheme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                    </motion.button>
-
-                    {/* Notifications */}
-                    <div className="relative">
-                        <motion.button
-                            whileHover={{ backgroundColor: 'rgba(var(--brand-primary), 0.1)' }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setIsNotificationOpen(!isNotificationOpen);
-                                setIsStreakMenuOpen(false);
-                            }}
-                            className={`w-10 h-10 flex items-center justify-center rounded-xl text-foreground-muted hover:text-foreground transition-colors relative ${isNotificationOpen ? 'bg-brand-primary/10 text-brand-primary' : ''}`}
-                            title="Notifications"
-                        >
-                            <Bell className="w-5 h-5" />
-                            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-background" />
-                        </motion.button>
-
-                        <AnimatePresence>
-                            {isNotificationOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    className="absolute top-full right-0 mt-3 w-96 bg-surface border border-border rounded-2xl shadow-xl z-50 overflow-hidden"
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    <div className="flex items-center justify-between p-5 border-b border-border bg-surface-hover/50">
-                                        <span className="font-bold text-foreground text-sm">Notifications</span>
-                                        <button
-                                            onClick={() => setIsNotificationOpen(false)}
-                                            className="text-[10px] bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 px-2 py-0.5 rounded-full font-bold transition-colors"
-                                        >
-                                            Mark all read
-                                        </button>
-                                    </div>
-                                    <div className="max-h-[400px] overflow-y-auto">
-                                        {/* Notification Item 1 */}
-                                        <div className="p-5 border-b border-border hover:bg-surface-hover transition-colors cursor-pointer flex gap-4 group">
-                                            <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                                                <BookOpen className="w-5 h-5" />
-                                            </div>
-                                            <div>
-                                                <p className="text-sm text-foreground font-semibold leading-tight mb-1">New Deck Added</p>
-                                                <p className="text-xs text-foreground-secondary font-medium">"Biology 101" is ready for study.</p>
-                                                <p className="text-[10px] text-foreground-muted mt-2 font-semibold">2 min ago</p>
-                                            </div>
-                                            <div className="ml-auto w-1.5 h-1.5 rounded-full bg-brand-primary mt-1.5 shrink-0" />
-                                        </div>
-
-                                        {/* Notification Item 2 */}
-                                        <div className="p-5 border-b border-border hover:bg-surface-hover transition-colors cursor-pointer flex gap-4 group">
-                                            <div className="w-10 h-10 rounded-full bg-orange-500/10 text-orange-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                                                <Flame className="w-5 h-5" />
-                                            </div>
-                                            <div>
-                                                <p className="text-sm text-foreground font-semibold leading-tight mb-1">Streak Saved!</p>
-                                                <p className="text-xs text-foreground-secondary font-medium">You reached your daily goal.</p>
-                                                <p className="text-[10px] text-foreground-muted mt-2 font-semibold">5 hours ago</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Empty State / End of list */}
-                                        <div className="p-4 text-center">
-                                            <p className="text-[10px] text-foreground-muted font-bold uppercase tracking-widest">No more notifications</p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                <div className="flex items-center gap-6">
+                    {/* Minimal Streak Badge */}
+                    <div className="flex items-center gap-2 pr-4 border-r border-border">
+                        <Flame className="w-5 h-5 text-orange-500 fill-orange-500" />
+                        <span className="text-sm font-black text-foreground">{getStreak()} day streak</span>
                     </div>
 
-                    <div className="w-px h-6 bg-border" />
-
-                    {/* Streak Counter */}
-                    <div className="relative">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setIsStreakMenuOpen(!isStreakMenuOpen);
-                                setIsNotificationOpen(false);
-                            }}
-                            className={`h-10 px-3 flex items-center gap-2 rounded-xl bg-orange-500/10 text-orange-500 font-bold text-sm min-w-[3rem] justify-center hover:bg-orange-500/20 transition-colors ${isStreakMenuOpen ? 'ring-2 ring-orange-500/20' : ''}`}
-                            title="Streak"
-                        >
-                            <Flame className="w-4 h-4 fill-current" />
-                            <span>{streak}</span>
-                        </motion.button>
-
-                        <AnimatePresence>
-                            {isStreakMenuOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                    className="absolute top-full right-0 mt-3 w-72 bg-[#1A1A1A] border border-white/10 rounded-2xl shadow-xl z-50 overflow-hidden p-6 text-center"
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    <div className="w-16 h-16 mx-auto bg-orange-500/10 rounded-full flex items-center justify-center mb-4 relative">
-                                        <div className="absolute inset-0 bg-orange-500/20 blur-xl rounded-full"></div>
-                                        <Flame className="w-8 h-8 text-orange-500 relative z-10 fill-current" />
-                                    </div>
-
-                                    <h3 className="text-2xl font-black text-white mb-1">{streak} Days</h3>
-                                    <p className="text-zinc-500 text-sm font-medium mb-6">You're getting smarter every day!</p>
-
-                                    {/* Week Visualization */}
-                                    <div className="flex justify-between items-center mb-6 px-1">
-                                        {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, i) => (
-                                            <div key={i} className="flex flex-col items-center gap-2">
-                                                <span className="text-[10px] font-bold text-zinc-600">{day}</span>
-                                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${i < 3 ? 'bg-orange-500 text-black' : 'bg-white/5 text-zinc-600'}`}>
-                                                    {i < 3 && "✓"}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <button
-                                        onClick={() => {
-                                            setIsStreakMenuOpen(false);
-                                            // Handle whatever "Continue Streak" means, maybe just close or go to study
-                                        }}
-                                        className="w-full py-2.5 rounded-xl bg-orange-500 text-black font-bold text-sm hover:bg-orange-400 transition-colors"
-                                    >
-                                        Continue Streak
-                                    </button>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-
-                    <div className="w-px h-6 bg-border" />
-
-                    {/* Quick Add Button */}
                     <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsCreateModalOpen(true);
-                            setIsNotificationOpen(false);
-                            setIsStreakMenuOpen(false);
-                        }}
-                        className="flex items-center justify-center w-10 h-10 bg-brand-primary text-white rounded-xl font-bold shadow-lg shadow-brand-primary/25 hover:bg-brand-primary/90 transition-all border border-white/10"
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setIsCreateModalOpen(true)}
+                        className="btn-premium px-6 py-2.5 rounded-2xl font-black flex items-center gap-2 shadow-lg shadow-brand-primary/20 transition-all border border-white/10"
                         title="Create New"
                     >
-                        <Plus className="w-5 h-5" />
+                        <Plus className="w-4 h-4" />
+                        <span className="text-sm">New Deck</span>
                     </motion.button>
                 </div>
             </div>
-
 
             {/* Recent Decks Section */}
             {recentDecks.length > 0 && (
@@ -254,21 +151,25 @@ export default function DashboardPage() {
                             View All
                         </button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {recentDecks.map((d, index) => {
-                            const stats = getDeckStats(d.id, d.cards.length);
+                    <motion.div 
+                        variants={staggerContainer}
+                        initial="hidden"
+                        animate="show"
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    >
+                        {recentDecks.map((d) => {
+                            const stats = getDeckStats(d.id, d.cards.map(c => c.id));
                             return (
                                 <RecentDeckCard
                                     key={d.id}
                                     deck={d}
                                     stats={stats}
-                                    delay={(index) * 0.05}
                                     handleDeckClick={handleDeckClick}
                                     formatLastStudied={formatLastStudied}
                                 />
                             );
                         })}
-                    </div>
+                    </motion.div>
                 </FadeInUp>
             )}
 
@@ -279,7 +180,7 @@ export default function DashboardPage() {
 
                     {/* Upload Card */}
                     <div
-                        onClick={() => navigate('/generate?method=upload')}
+                        onClick={() => navigate('/generate/upload')}
                         className="bg-surface border border-border relative overflow-hidden group hover:border-border-strong transition-all cursor-pointer rounded-[2rem] p-6 h-full hover:bg-surface-hover"
                     >
                         <div className="mb-4 p-3 bg-purple-500/10 text-purple-500 rounded-2xl w-fit">
@@ -311,7 +212,7 @@ export default function DashboardPage() {
 
                     {/* Manual Notes Card */}
                     <div
-                        onClick={() => navigate('/generate?method=text')}
+                        onClick={() => navigate('/generate/text')}
                         className="bg-surface border border-border relative overflow-hidden group hover:border-border-strong transition-all cursor-pointer rounded-[2rem] p-6 hover:bg-surface-hover h-full"
                     >
                         <div className="mb-4 p-3 bg-blue-500/10 text-blue-500 rounded-2xl w-fit">

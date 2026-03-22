@@ -9,7 +9,7 @@ export const PrivacyPolicyPage = () => {
             <section className="space-y-4">
                 <h2 className="text-xl font-bold text-slate-900">1. Data Minimization</h2>
                 <p>
-                    visdly follows a strict data minimization policy. We only collect the bare minimum information required to operate our AI study tools and secure your account.
+                    Viszmo follows a strict data minimization policy. We only collect the bare minimum information required to operate our AI study tools and secure your account.
                 </p>
             </section>
 
@@ -29,7 +29,7 @@ export const PrivacyPolicyPage = () => {
                 <h2 className="text-xl font-bold text-slate-900">3. Information Collection</h2>
                 <ul className="list-disc pl-5 space-y-2">
                     <li><strong>Account Basics:</strong> We store your email address and encrypted authentication tokens.</li>
-                    <li><strong>Payment Data:</strong> Payment processing is handled by Stripe. visdly does not store your credit card details on our own servers.</li>
+                    <li><strong>Payment Data:</strong> Payment processing is handled by Stripe. Viszmo does not store your credit card details on our own servers.</li>
                     <li><strong>Security Logs:</strong> We may collect technical identifiers like IP addresses at signup to prevent duplicate account fraud and maintain platform security.</li>
                 </ul>
             </section>
@@ -51,7 +51,7 @@ export const PrivacyPolicyPage = () => {
             <section className="space-y-4">
                 <h2 className="text-xl font-bold text-slate-900">6. Privacy Inquiries</h2>
                 <p>
-                    For any questions regarding your data privacy, please reach out to <a href="mailto:support@visdly.com" className="text-[#0ea5e9] hover:underline">support@visdly.com</a>.
+                    For any questions regarding your data privacy, please reach out to <a href="mailto:support@viszmo.com" className="text-[#0ea5e9] hover:underline">support@viszmo.com</a>.
                 </p>
             </section>
         </StaticPageLayout>

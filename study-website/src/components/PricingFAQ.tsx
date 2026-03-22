@@ -43,7 +43,7 @@ export const PricingFAQ = () => {
                         transition={{ duration: 0.5, delay: 0.1 }}
                         className="text-base sm:text-lg text-slate-500 font-medium px-2"
                     >
-                        Everything you need to know about visdly Pricing.
+                        Everything you need to know about Viszmo Pricing.
                     </motion.p>
                 </div>
 

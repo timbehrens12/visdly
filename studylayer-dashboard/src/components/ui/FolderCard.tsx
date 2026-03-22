@@ -5,17 +5,18 @@ import { MoreVertical, Trash2, Palette } from 'lucide-react';
 
 interface FolderCardProps {
     folder: {
-        id: number;
+        id: string;
         name: string;
         color: string;
         createdAt: string;
     };
     decksCount: number;
     delay?: number;
-    openDropdownId: string | number | null;
-    setOpenDropdownId: (id: string | number | null) => void;
-    handleOpenRenameFolder: (id: number) => void;
-    handleDeleteFolder: (id: number) => void;
+    openDropdownId: string | null;
+    setOpenDropdownId: (id: string | null) => void;
+    handleOpenRenameFolder: (id: string) => void;
+    handleDeleteFolder: (id: string) => void;
+    onClick?: () => void;
 }
 
 export const FolderCard: React.FC<FolderCardProps> = ({
@@ -26,6 +27,7 @@ export const FolderCard: React.FC<FolderCardProps> = ({
     setOpenDropdownId,
     handleOpenRenameFolder,
     handleDeleteFolder,
+    onClick,
 }) => {
     const [isDeleteHolding, setIsDeleteHolding] = React.useState(false);
 
@@ -47,6 +49,7 @@ export const FolderCard: React.FC<FolderCardProps> = ({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, delay }}
+            onClick={onClick}
             className="relative h-[220px] w-full group cursor-pointer select-none"
         >
             {/* Back Panel (Tab Layer) - Darker shade */}

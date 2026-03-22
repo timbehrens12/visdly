@@ -8,7 +8,7 @@ interface MatchGameProps {
         gravityLoop?: boolean; // Enable gravity refill
         [key: string]: any;
     };
-    cards: Array<{ term: string, definition: string, case?: string, id: number }>;
+    cards: Array<{ term: string, definition: string, case?: string, id: string }>;
 }
 
 interface Tile {

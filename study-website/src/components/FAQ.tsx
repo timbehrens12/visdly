@@ -9,8 +9,8 @@ interface FAQItem {
 
 const faqData: FAQItem[] = [
   {
-    question: "How does visdly work?",
-    answer: "visdly is a live study overlay that stays on your screen while you work. It uses OCR (Optical Character Recognition) to read text from your screen and AI to provide instant answers and explanations. Press Ctrl+Shift+Space to summon or hide the overlay anytime."
+    question: "How does Viszmo work?",
+    answer: "Viszmo is a live study overlay that stays on your screen while you work. It uses OCR (Optical Character Recognition) to read text from your screen and AI to provide instant answers and explanations. Press Ctrl+Shift+Space to summon or hide the overlay anytime."
   },
   {
     question: "What's the difference between Study and Solve modes?",
@@ -18,23 +18,23 @@ const faqData: FAQItem[] = [
   },
   {
     question: "Is there a free version?",
-    answer: "Yes! visdly offers a free tier with basic features including limited transcription and 5 questions per day. Upgrade to Pro for unlimited usage, access to newest AI models, and priority support."
+    answer: "Yes! Viszmo offers a free tier with basic features including limited transcription and 5 questions per day. Upgrade to Pro for unlimited usage, access to newest AI models, and priority support."
   },
   {
-    question: "Can I use visdly on Mac or Linux?",
-    answer: "Currently, visdly is available for Windows. We're working on Mac and Linux versions and will announce them soon. Sign up for our newsletter to be notified when they're available."
+    question: "Can I use Viszmo on Mac or Linux?",
+    answer: "Currently, Viszmo is available for Windows. We're working on Mac and Linux versions and will announce them soon. Sign up for our newsletter to be notified when they're available."
   },
   {
     question: "How accurate is the OCR and AI?",
-    answer: "visdly uses advanced OCR technology to read text from your screen with high accuracy. Combined with GPT-4o-mini (or GPT-4 if you prefer), it provides reliable answers. Accuracy depends on screen quality and text clarity."
+    answer: "Viszmo uses advanced OCR technology to read text from your screen with high accuracy. Combined with GPT-4o-mini (or GPT-4 if you prefer), it provides reliable answers. Accuracy depends on screen quality and text clarity."
   },
   {
     question: "Will my data be stored or shared?",
-    answer: "No. visdly processes everything locally on your device. Your screen content and questions are sent directly to OpenAI's API (which you control with your own API key). We don't store, log, or share any of your data."
+    answer: "No. Viszmo processes everything locally on your device. Your screen content and questions are sent directly to OpenAI's API (which you control with your own API key). We don't store, log, or share any of your data."
   },
   {
-    question: "Can I use visdly during online exams?",
-    answer: "visdly is designed to work during online meetings and exams. However, we recommend checking your institution's academic integrity policies. visdly can be used as a study tool to help you learn, not just during exams."
+    question: "Can I use Viszmo during online exams?",
+    answer: "Viszmo is designed to work during online meetings and exams. However, we recommend checking your institution's academic integrity policies. Viszmo can be used as a study tool to help you learn, not just during exams."
   },
   {
     question: "What happens if I exceed my free tier limits?",
@@ -107,7 +107,7 @@ export const FAQ = () => {
           className="text-center mt-12"
         >
           <a
-            href="mailto:support@visdly.com"
+            href="mailto:support@viszmo.com"
             className="text-sm text-white/60 hover:text-white transition-colors underline underline-offset-4"
           >
             Contact support

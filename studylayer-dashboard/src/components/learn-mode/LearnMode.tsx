@@ -25,7 +25,7 @@ type StudyPhase = 'teaching' | 'practice' | 'quiz';
 // ============================================
 
 interface LearnModeProps {
-    cards: Array<{ term: string; definition: string; id: number; starred?: boolean }>;
+    cards: Array<{ term: string; definition: string; id: string; starred?: boolean }>;
     settings: LearnModeSettings;
     deckId?: string;
     onComplete: (results: LearnCard[]) => void;

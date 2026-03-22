@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { supabase, getSupabaseClient } from '../lib/supabase';
+import { useClerkSession } from '../lib/clerk';
 
 // ============================================
 // TYPES
@@ -8,7 +10,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from '
 export type CardRating = 'still-learning' | 'somewhat' | 'know';
 
 export interface CardProgress {
-    cardId: number;
+    cardId: string; // Changed to string
     deckId: string;
     // Spaced repetition values
     easeFactor: number;      // Multiplier for intervals (starts at 2.5)
@@ -63,23 +65,23 @@ export interface DailyStats {
 interface StudyProgressContextType {
     // Card progress
     cardProgress: Record<string, CardProgress>;
-    updateCardProgress: (deckId: string, cardId: number, rating: CardRating) => void;
-    getCardProgress: (deckId: string, cardId: number) => CardProgress | null;
-    resetCardProgress: (deckId: string, cardId: number) => void;
+    updateCardProgress: (deckId: string, cardId: string, rating: CardRating) => Promise<void>;
+    getCardProgress: (deckId: string, cardId: string) => CardProgress | null;
+    resetCardProgress: (deckId: string, cardId: string) => void;
     resetDeckProgress: (deckId: string) => void;
 
     // Due cards
-    getDueCards: (deckId: string, cardIds: number[]) => number[];
-    getNewCards: (deckId: string, cardIds: number[]) => number[];
-    getLearningCards: (deckId: string, cardIds: number[]) => number[];
+    getDueCards: (deckId: string, cardIds: string[]) => string[];
+    getNewCards: (deckId: string, cardIds: string[]) => string[];
+    getLearningCards: (deckId: string, cardIds: string[]) => string[];
 
     // Deck stats
-    getDeckStats: (deckId: string, totalCards: number) => DeckStats;
+    getDeckStats: (deckId: string, cardIds: string[]) => DeckStats;
 
     // Sessions
     sessions: StudySession[];
-    startSession: (deckId: string) => string;
-    endSession: (sessionId: string) => void;
+    startSession: (deckId: string) => Promise<string>;
+    endSession: (sessionId: string) => Promise<void>;
     recordCardResult: (sessionId: string, rating: CardRating) => void;
 
     // Daily stats
@@ -117,40 +119,36 @@ function calculateNextReview(
 
     switch (rating) {
         case 'still-learning':
-            // Reset - card needs more learning
             repetitions = 0;
-            interval = 0; // Review again soon (same session or next time)
-            easeFactor = Math.max(1.3, easeFactor - 0.3); // Make it harder
+            interval = 0;
+            easeFactor = Math.max(1.3, easeFactor - 0.3);
             status = 'learning';
             break;
 
         case 'somewhat':
-            // Partial success - small interval increase
             if (repetitions === 0) {
-                interval = 1; // 1 day
+                interval = 1;
             } else {
-                interval = Math.ceil(interval * 1.2); // 20% increase
+                interval = Math.ceil(interval * 1.2);
             }
             repetitions += 1;
-            easeFactor = Math.max(1.3, easeFactor - 0.1); // Slight decrease
+            easeFactor = Math.max(1.3, easeFactor - 0.1);
             status = repetitions >= 2 ? 'reviewing' : 'learning';
             break;
 
         case 'know':
-            // Success - normal spaced repetition
             if (repetitions === 0) {
-                interval = 1; // 1 day
+                interval = 1;
             } else if (repetitions === 1) {
-                interval = 3; // 3 days
+                interval = 3;
             } else if (repetitions === 2) {
-                interval = 7; // 1 week
+                interval = 7;
             } else {
-                interval = Math.ceil(interval * easeFactor); // Exponential growth
+                interval = Math.ceil(interval * easeFactor);
             }
             repetitions += 1;
-            easeFactor = Math.min(3.0, easeFactor + 0.1); // Slight increase, max 3.0
+            easeFactor = Math.min(3.0, easeFactor + 0.1);
 
-            // Mastered after 5+ successful reviews with interval > 21 days
             if (repetitions >= 5 && interval > 21) {
                 status = 'mastered';
             } else if (repetitions >= 2) {
@@ -169,53 +167,91 @@ function calculateNextReview(
 // ============================================
 
 export function StudyProgressProvider({ children }: { children: ReactNode }) {
-    // Load initial state from localStorage
-    const [cardProgress, setCardProgress] = useState<Record<string, CardProgress>>(() => {
-        try {
-            const saved = localStorage.getItem('studylayer_card_progress');
-            return saved ? JSON.parse(saved) : {};
-        } catch {
-            return {};
-        }
-    });
+    const { isSignedIn, getToken } = useClerkSession();
+    const [cardProgress, setCardProgress] = useState<Record<string, CardProgress>>({});
+    const [sessions, setSessions] = useState<StudySession[]>([]);
+    const [dailyStats, setDailyStats] = useState<DailyStats[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const [sessions, setSessions] = useState<StudySession[]>(() => {
-        try {
-            const saved = localStorage.getItem('studylayer_sessions');
-            return saved ? JSON.parse(saved) : [];
-        } catch {
-            return [];
-        }
-    });
-
-    const [dailyStats, setDailyStats] = useState<DailyStats[]>(() => {
-        try {
-            const saved = localStorage.getItem('studylayer_daily_stats');
-            return saved ? JSON.parse(saved) : [];
-        } catch {
-            return [];
-        }
-    });
-
-    // Persist to localStorage
+    // Initial Load
     useEffect(() => {
-        localStorage.setItem('studylayer_card_progress', JSON.stringify(cardProgress));
-    }, [cardProgress]);
+        const loadProgress = async () => {
+            setIsLoading(true);
+            
+            // 1. Local fallback
+            const localProgress = localStorage.getItem('studylayer_card_progress');
+            const localSessions = localStorage.getItem('studylayer_sessions');
+            const localStats = localStorage.getItem('studylayer_daily_stats');
 
+            if (localProgress) setCardProgress(JSON.parse(localProgress));
+            if (localSessions) setSessions(JSON.parse(localSessions));
+            if (localStats) setDailyStats(JSON.parse(localStats));
+
+            // 2. Cloud fetch
+            if (isSignedIn) {
+                try {
+                    const token = await getToken();
+                    const client = getSupabaseClient(token || undefined);
+
+                    const { data: cloudProgress } = await client.from('study_progress').select('*');
+                    if (cloudProgress) {
+                        const progressMap: Record<string, CardProgress> = {};
+                        cloudProgress.forEach((p: any) => {
+                            progressMap[`${p.deck_id}_${p.card_id}`] = {
+                                cardId: p.card_id,
+                                deckId: p.deck_id,
+                                easeFactor: p.ease_factor,
+                                interval: p.interval,
+                                repetitions: p.repetitions,
+                                status: p.status,
+                                lastReviewed: p.last_reviewed,
+                                nextReview: p.next_review,
+                                timesStudied: p.times_studied,
+                                timesCorrect: p.times_correct,
+                                timesSomewhat: p.times_somewhat,
+                                timesWrong: p.times_wrong
+                            } as CardProgress;
+                        });
+                        setCardProgress(progressMap);
+                    }
+
+                    const { data: cloudSessions } = await client.from('study_sessions').select('*').limit(50).order('start_time', { ascending: false });
+                    if (cloudSessions) {
+                        setSessions(cloudSessions.map((s: any) => ({
+                            id: s.id,
+                            deckId: s.deck_id,
+                            startTime: s.start_time,
+                            endTime: s.end_time,
+                            cardsStudied: s.cards_studied,
+                            correctCount: s.correct_count,
+                            somewhatCount: s.somewhat_count,
+                            wrongCount: s.wrong_count
+                        })));
+                    }
+                } catch (e) {
+                    console.error('Failed to sync study progress with cloud:', e);
+                }
+            }
+            setIsLoading(false);
+        };
+
+        loadProgress();
+    }, [isSignedIn]);
+
+    // Persist to local
     useEffect(() => {
-        localStorage.setItem('studylayer_sessions', JSON.stringify(sessions));
-    }, [sessions]);
+        if (!isLoading) {
+            localStorage.setItem('studylayer_card_progress', JSON.stringify(cardProgress));
+            localStorage.setItem('studylayer_sessions', JSON.stringify(sessions));
+            localStorage.setItem('studylayer_daily_stats', JSON.stringify(dailyStats));
+        }
+    }, [cardProgress, sessions, dailyStats, isLoading]);
 
-    useEffect(() => {
-        localStorage.setItem('studylayer_daily_stats', JSON.stringify(dailyStats));
-    }, [dailyStats]);
-
-    // Helper to get progress key
-    const getProgressKey = (deckId: string, cardId: number) => `${deckId}_${cardId}`;
+    const getProgressKey = (deckId: string, cardId: string) => `${deckId}_${cardId}`;
 
     // ========== CARD PROGRESS ==========
 
-    const updateCardProgress = (deckId: string, cardId: number, rating: CardRating) => {
+    const updateCardProgress = async (deckId: string, cardId: string, rating: CardRating) => {
         const key = getProgressKey(deckId, cardId);
         const current = cardProgress[key] || null;
         const { interval, easeFactor, repetitions, status } = calculateNextReview(current, rating);
@@ -240,32 +276,52 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
         };
 
         setCardProgress(prev => ({ ...prev, [key]: updated }));
-
-        // Update daily stats
         updateDailyStats(rating);
+
+        if (isSignedIn && !cardId.startsWith('local_')) {
+            try {
+                const token = await getToken();
+                const client = getSupabaseClient(token || undefined);
+                await client.from('study_progress').upsert({
+                    card_id: cardId,
+                    deck_id: deckId,
+                    ease_factor: easeFactor,
+                    interval: interval,
+                    repetitions: repetitions,
+                    status: status,
+                    last_reviewed: updated.lastReviewed,
+                    next_review: updated.nextReview,
+                    times_studied: updated.timesStudied,
+                    times_correct: updated.timesCorrect,
+                    times_somewhat: updated.timesSomewhat,
+                    times_wrong: updated.timesWrong,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'user_id,card_id' });
+            } catch (e) {
+                console.error('Failed to sync card progress to cloud:', e);
+            }
+        }
     };
 
-    const getCardProgress = (deckId: string, cardId: number): CardProgress | null => {
-        const key = getProgressKey(deckId, cardId);
-        return cardProgress[key] || null;
+    const getCardProgress = (deckId: string, cardId: string): CardProgress | null => {
+        return cardProgress[getProgressKey(deckId, cardId)] || null;
     };
 
-    const resetCardProgress = (deckId: string, cardId: number) => {
+    const resetCardProgress = (deckId: string, cardId: string) => {
         const key = getProgressKey(deckId, cardId);
         setCardProgress(prev => {
             const updated = { ...prev };
             delete updated[key];
             return updated;
         });
+        // Note: Cloud delete would happen here
     };
 
     const resetDeckProgress = (deckId: string) => {
         setCardProgress(prev => {
             const updated = { ...prev };
             Object.keys(updated).forEach(key => {
-                if (key.startsWith(`${deckId}_`)) {
-                    delete updated[key];
-                }
+                if (key.startsWith(`${deckId}_`)) delete updated[key];
             });
             return updated;
         });
@@ -273,23 +329,23 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
 
     // ========== DUE CARDS ==========
 
-    const getDueCards = (deckId: string, cardIds: number[]): number[] => {
+    const getDueCards = (deckId: string, cardIds: string[]): string[] => {
         const now = new Date();
         return cardIds.filter(cardId => {
             const progress = getCardProgress(deckId, cardId);
-            if (!progress) return false; // New cards aren't "due"
+            if (!progress) return false;
             return new Date(progress.nextReview) <= now;
         });
     };
 
-    const getNewCards = (deckId: string, cardIds: number[]): number[] => {
+    const getNewCards = (deckId: string, cardIds: string[]): string[] => {
         return cardIds.filter(cardId => {
             const progress = getCardProgress(deckId, cardId);
             return !progress || progress.status === 'new';
         });
     };
 
-    const getLearningCards = (deckId: string, cardIds: number[]): number[] => {
+    const getLearningCards = (deckId: string, cardIds: string[]): string[] => {
         return cardIds.filter(cardId => {
             const progress = getCardProgress(deckId, cardId);
             return progress?.status === 'learning';
@@ -298,7 +354,7 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
 
     // ========== DECK STATS ==========
 
-    const getDeckStats = (deckId: string, totalCards: number): DeckStats => {
+    const getDeckStats = (deckId: string, cardIds: string[]): DeckStats => {
         const now = new Date();
         let newCards = 0;
         let learningCards = 0;
@@ -307,43 +363,25 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
         let dueToday = 0;
         let totalMastery = 0;
 
-        // Check all possible card IDs (1 to totalCards)
-        for (let cardId = 1; cardId <= totalCards; cardId++) {
+        cardIds.forEach(cardId => {
             const progress = getCardProgress(deckId, cardId);
-
             if (!progress) {
                 newCards++;
-                continue;
+                return;
             }
-
             switch (progress.status) {
-                case 'new':
-                    newCards++;
-                    break;
-                case 'learning':
-                    learningCards++;
-                    totalMastery += 25; // 25% mastery for learning
-                    break;
-                case 'reviewing':
-                    reviewingCards++;
-                    totalMastery += 60; // 60% mastery for reviewing
-                    break;
-                case 'mastered':
-                    masteredCards++;
-                    totalMastery += 100; // 100% mastery
-                    break;
+                case 'new': newCards++; break;
+                case 'learning': learningCards++; totalMastery += 25; break;
+                case 'reviewing': reviewingCards++; totalMastery += 60; break;
+                case 'mastered': masteredCards++; totalMastery += 100; break;
             }
+            if (new Date(progress.nextReview) <= now) dueToday++;
+        });
 
-            // Check if due
-            if (new Date(progress.nextReview) <= now) {
-                dueToday++;
-            }
-        }
-
-        const averageMastery = totalCards > 0 ? Math.round(totalMastery / totalCards) : 0;
+        const averageMastery = cardIds.length > 0 ? Math.round(totalMastery / cardIds.length) : 0;
 
         return {
-            totalCards,
+            totalCards: cardIds.length,
             newCards,
             learningCards,
             reviewingCards,
@@ -355,9 +393,10 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
 
     // ========== SESSIONS ==========
 
-    const startSession = (deckId: string): string => {
+    const startSession = async (deckId: string): Promise<string> => {
+        const localId = `session_${Date.now()}`;
         const session: StudySession = {
-            id: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            id: localId,
             deckId,
             startTime: new Date().toISOString(),
             cardsStudied: 0,
@@ -365,16 +404,49 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
             somewhatCount: 0,
             wrongCount: 0
         };
-        setSessions(prev => [...prev, session]);
-        return session.id;
+        setSessions(prev => [session, ...prev]);
+
+        if (isSignedIn && !deckId.startsWith('local_')) {
+            try {
+                const token = await getToken();
+                const client = getSupabaseClient(token || undefined);
+                const { data } = await client.from('study_sessions').insert({
+                    deck_id: deckId,
+                    start_time: session.startTime
+                }).select().single();
+                if (data) {
+                    setSessions(prev => prev.map(s => s.id === localId ? { ...s, id: data.id } : s));
+                    return data.id;
+                }
+            } catch (e) {
+                console.error('Failed to start cloud session:', e);
+            }
+        }
+        return localId;
     };
 
-    const endSession = (sessionId: string) => {
-        setSessions(prev => prev.map(s =>
-            s.id === sessionId
-                ? { ...s, endTime: new Date().toISOString() }
-                : s
-        ));
+    const endSession = async (sessionId: string) => {
+        const endTime = new Date().toISOString();
+        setSessions(prev => prev.map(s => s.id === sessionId ? { ...s, endTime } : s));
+
+        if (isSignedIn && !sessionId.startsWith('session_')) {
+            try {
+                const s = sessions.find(sess => sess.id === sessionId);
+                if (s) {
+                    const token = await getToken();
+                    const client = getSupabaseClient(token || undefined);
+                    await client.from('study_sessions').update({
+                        end_time: endTime,
+                        cards_studied: s.cardsStudied,
+                        correct_count: s.correctCount,
+                        somewhat_count: s.somewhatCount,
+                        wrong_count: s.wrongCount
+                    }).eq('id', sessionId);
+                }
+            } catch (e) {
+                console.error('Failed to end cloud session:', e);
+            }
+        }
     };
 
     const recordCardResult = (sessionId: string, rating: CardRating) => {
@@ -394,15 +466,11 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
 
     const getTodayKey = () => {
         const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     };
 
     const updateDailyStats = (rating: CardRating) => {
         const today = getTodayKey();
-
         setDailyStats(prev => {
             const existing = prev.find(d => d.date === today);
             if (existing) {
@@ -414,155 +482,76 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
                     wrongCount: d.wrongCount + (rating === 'still-learning' ? 1 : 0),
                 } : d);
             } else {
-                return [...prev, {
-                    date: today,
-                    cardsStudied: 1,
-                    timeSpentMinutes: 0, // Track separately if needed
-                    correctCount: rating === 'know' ? 1 : 0,
-                    somewhatCount: rating === 'somewhat' ? 1 : 0,
-                    wrongCount: rating === 'still-learning' ? 1 : 0,
-                }];
+                return [...prev, { date: today, cardsStudied: 1, timeSpentMinutes: 0,
+                    correctCount: rating === 'know' ? 1 : 0, somewhatCount: rating === 'somewhat' ? 1 : 0,
+                    wrongCount: rating === 'still-learning' ? 1 : 0 }];
             }
         });
     };
 
     const getTodaysStats = (): DailyStats => {
         const today = getTodayKey();
-        return dailyStats.find(d => d.date === today) || {
-            date: today,
-            cardsStudied: 0,
-            timeSpentMinutes: 0,
-            correctCount: 0,
-            somewhatCount: 0,
-            wrongCount: 0,
-        };
+        return dailyStats.find(d => d.date === today) || { date: today, cardsStudied: 0, timeSpentMinutes: 0,
+            correctCount: 0, somewhatCount: 0, wrongCount: 0 };
     };
 
     const getWeeklyStats = (): DailyStats[] => {
-        const now = new Date();
-        const weekAgo = new Date(now);
+        const weekAgo = new Date();
         weekAgo.setDate(weekAgo.getDate() - 7);
-        // Reset time to ensure we compare dates accurately
         weekAgo.setHours(0, 0, 0, 0);
-
-        return dailyStats.filter(d => {
-            const dateParts = d.date.split('-');
-            const statDate = new Date(
-                parseInt(dateParts[0]),
-                parseInt(dateParts[1]) - 1,
-                parseInt(dateParts[2])
-            );
-            return statDate >= weekAgo;
-        });
+        return dailyStats.filter(d => new Date(d.date) >= weekAgo);
     };
 
-    const getStreak = (): number => {
-        // Sort dates descending
-        const sortedDays = dailyStats
-            .filter(d => d.cardsStudied > 0)
-            .map(d => d.date)
-            .sort((a, b) => b.localeCompare(a));
+    const getStreak = useCallback((): number => {
+        if (dailyStats.length === 0) return 0;
 
-        if (sortedDays.length === 0) return 0;
-
-        const today = getTodayKey();
-
-        // Calculate yesterday's key using local time
+        // Use local date strings for consistent date handling
+        const today = new Date().toLocaleDateString('en-CA');
         const yesterdayDate = new Date();
         yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-        const yYear = yesterdayDate.getFullYear();
-        const yMonth = String(yesterdayDate.getMonth() + 1).padStart(2, '0');
-        const yDay = String(yesterdayDate.getDate()).padStart(2, '0');
-        const yesterdayKey = `${yYear}-${yMonth}-${yDay}`;
+        const yesterday = yesterdayDate.toLocaleDateString('en-CA');
 
-        // Must have studied today or yesterday to have a streak
-        // If the latest study date isn't today OR yesterday, streak is broken
-        if (sortedDays[0] !== today && sortedDays[0] !== yesterdayKey) {
-            return 0;
-        }
+        // Check if there's any study data for today or yesterday
+        const hasStudiedToday = dailyStats.some(s => s.date === today && s.cardsStudied > 0);
+        const hasStudiedYesterday = dailyStats.some(s => s.date === yesterday && s.cardsStudied > 0);
+
+        if (!hasStudiedToday && !hasStudiedYesterday) return 0;
 
         let streak = 0;
-        let checkDate = new Date();
+        let tempDate = new Date(hasStudiedToday ? today : yesterday);
 
-        // If we haven't studied today yet but have yesterday, the streak assumes we WILL study today
-        // But for calculation, we start checking from the latest study date
-        const latestStudyDate = sortedDays[0];
-
-        // If latest study was today, start checking from today
-        // If latest study was yesterday, start checking from yesterday
-        if (latestStudyDate === today) {
-            // current checkDate is already today
-        } else if (latestStudyDate === yesterdayKey) {
-            checkDate.setDate(checkDate.getDate() - 1);
-        }
-
-        // Loop backwards
-        for (let i = 0; i < sortedDays.length; i++) {
-            const cYear = checkDate.getFullYear();
-            const cMonth = String(checkDate.getMonth() + 1).padStart(2, '0');
-            const cDay = String(checkDate.getDate()).padStart(2, '0');
-            const checkDateKey = `${cYear}-${cMonth}-${cDay}`;
-
-            if (sortedDays.includes(checkDateKey)) {
+        while (true) {
+            const dateStr = tempDate.toLocaleDateString('en-CA');
+            const found = dailyStats.find(s => s.date === dateStr && s.cardsStudied > 0);
+            
+            if (found) {
                 streak++;
-                checkDate.setDate(checkDate.getDate() - 1); // Go to previous day
+                tempDate.setDate(tempDate.getDate() - 1);
             } else {
-                break; // Gap found
+                break;
             }
         }
 
         return streak;
-    };
+    }, [dailyStats]);
 
-    // ========== OVERALL STATS ==========
-
-    const getTotalCardsStudied = (): number => {
-        return dailyStats.reduce((sum, d) => sum + d.cardsStudied, 0);
-    };
-
-    const getTotalStudyTime = (): number => {
-        return dailyStats.reduce((sum, d) => sum + d.timeSpentMinutes, 0);
-    };
-
-    // ========== CONTEXT VALUE ==========
-
-    const value: StudyProgressContextType = {
-        cardProgress,
-        updateCardProgress,
-        getCardProgress,
-        resetCardProgress,
-        resetDeckProgress,
-        getDueCards,
-        getNewCards,
-        getLearningCards,
-        getDeckStats,
-        sessions,
-        startSession,
-        endSession,
-        recordCardResult,
-        dailyStats,
-        getTodaysStats,
-        getWeeklyStats,
-        getStreak,
-        getTotalCardsStudied,
-        getTotalStudyTime,
-    };
+    const getTotalCardsStudied = () => dailyStats.reduce((sum, d) => sum + d.cardsStudied, 0);
+    const getTotalStudyTime = () => dailyStats.reduce((sum, d) => sum + d.timeSpentMinutes, 0);
 
     return (
-        <StudyProgressContext.Provider value={value}>
+        <StudyProgressContext.Provider value={{
+            cardProgress, updateCardProgress, getCardProgress, resetCardProgress, resetDeckProgress,
+            getDueCards, getNewCards, getLearningCards, getDeckStats, sessions, startSession,
+            endSession, recordCardResult, dailyStats, getTodaysStats, getWeeklyStats, getStreak,
+            getTotalCardsStudied, getTotalStudyTime
+        }}>
             {children}
         </StudyProgressContext.Provider>
     );
 }
 
-// ============================================
-// HOOK
-// ============================================
-
 export function useStudyProgress() {
     const context = useContext(StudyProgressContext);
-    if (context === undefined) {
-        throw new Error('useStudyProgress must be used within a StudyProgressProvider');
-    }
+    if (context === undefined) throw new Error('useStudyProgress must be used within a StudyProgressProvider');
     return context;
 }

@@ -8,8 +8,8 @@ interface MoveDeckModalProps {
     onClose: () => void;
     deckName: string;
     folders: FolderType[];
-    currentFolderId?: number | null;
-    onMove: (folderId: number | null) => void;
+    currentFolderId?: string | null;
+    onMove: (folderId: string | null) => void;
     onCreateFolder?: () => void;
 }
 
@@ -22,7 +22,7 @@ export function MoveDeckModal({
     onMove,
     onCreateFolder
 }: MoveDeckModalProps) {
-    const [selectedFolderId, setSelectedFolderId] = useState<number | null>(currentFolderId ?? null);
+    const [selectedFolderId, setSelectedFolderId] = useState<string | null>(currentFolderId ?? null);
 
     const handleMove = () => {
         onMove(selectedFolderId);

@@ -5,6 +5,7 @@ import {
     BookOpen,
     Folder,
     Trash2,
+    ArrowLeft,
     RotateCcw,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +47,8 @@ export default function MyDecksPage() {
     const { getDeckStats } = useStudyProgress();
 
     const [activeTab, setActiveTab] = useState<Tab>('decks');
-    const [openDropdownId, setOpenDropdownId] = useState<string | number | null>(null);
+    const [activeFolderId, setActiveFolderId] = useState<string | null>(null);
+    const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isCreateFolderModalOpen, setIsCreateFolderModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -55,7 +57,7 @@ export default function MyDecksPage() {
     const [settingsModal, setSettingsModal] = useState<{
         isOpen: boolean;
         type: 'deck' | 'folder';
-        id: string | number;
+        id: string;
         currentName: string;
         currentColor: string;
     }>({ isOpen: false, type: 'deck', id: '', currentName: '', currentColor: '' });
@@ -64,7 +66,7 @@ export default function MyDecksPage() {
         isOpen: boolean;
         deckId: string;
         deckName: string;
-        currentFolderId: number | null;
+        currentFolderId: string | null;
     }>({ isOpen: false, deckId: '', deckName: '', currentFolderId: null });
 
     // Study Modes Modal State
@@ -82,10 +84,14 @@ export default function MyDecksPage() {
     const deletedDecks = debugEmpty ? [] : rawDeletedDecks;
     const currentFolders = debugEmpty ? [] : rawFolders;
 
-    // Filter decks by search query
-    const filteredDecks = activeDecks.filter(d =>
-        d.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const activeFolder = folders.find(f => f.id === activeFolderId);
+
+    // Filter decks by search query AND current folder
+    const filteredDecks = activeDecks.filter(d => {
+        const matchesSearch = d.title.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesFolder = activeFolderId ? d.folderId === activeFolderId : !d.folderId; // Show root decks if no folder selected
+        return matchesSearch && matchesFolder;
+    });
 
     const filteredFolders = currentFolders.filter(f =>
         f.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -106,12 +112,13 @@ export default function MyDecksPage() {
         setOpenDropdownId(null);
     };
 
-    const handleDeleteFolder = (id: number) => {
+    const handleDeleteFolder = (id: string) => {
         deleteFolder(id);
         setOpenDropdownId(null);
+        if (activeFolderId === id) setActiveFolderId(null);
     };
 
-    const handleOpenRenameFolder = (id: number) => {
+    const handleOpenRenameFolder = (id: string) => {
         const folder = folders.find(f => f.id === id);
         if (folder) {
             setSettingsModal({
@@ -141,9 +148,9 @@ export default function MyDecksPage() {
 
     const handleSaveSettings = (newName: string, newColor: string) => {
         if (settingsModal.type === 'deck') {
-            updateDeck(settingsModal.id as string, { title: newName, color: newColor });
+            updateDeck(settingsModal.id, { title: newName, color: newColor });
         } else {
-            updateFolder(settingsModal.id as number, { name: newName, color: newColor });
+            updateFolder(settingsModal.id, { name: newName, color: newColor });
         }
     };
 
@@ -160,7 +167,7 @@ export default function MyDecksPage() {
         setOpenDropdownId(null);
     };
 
-    const handleMoveDeck = (folderId: number | null) => {
+    const handleMoveDeck = (folderId: string | null) => {
         moveDeckToFolder(moveModal.deckId, folderId);
     };
 
@@ -194,6 +201,11 @@ export default function MyDecksPage() {
         }
     };
 
+    const handleFolderClick = (id: string) => {
+        setActiveFolderId(id);
+        setActiveTab('decks');
+    };
+
     const handleEditDeck = (e: React.MouseEvent, deckId: string) => {
         e.stopPropagation();
         setActiveDeck(deckId);
@@ -221,9 +233,23 @@ export default function MyDecksPage() {
         <div className="p-8 max-w-7xl mx-auto min-h-screen" onClick={() => setOpenDropdownId(null)}>
             {/* Header */}
             <FadeInUp className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                <div>
-                    <h1 className="text-3xl font-bold text-foreground">Library</h1>
-                    <p className="text-foreground-secondary mt-1">Manage your decks and folders</p>
+                <div className="flex items-center gap-4">
+                    {activeFolderId && (
+                        <button
+                            onClick={() => setActiveFolderId(null)}
+                            className="p-2.5 rounded-xl bg-surface hover:bg-surface-hover border border-border transition-all group"
+                        >
+                            <ArrowLeft className="w-5 h-5 text-foreground-muted group-hover:text-brand-primary" />
+                        </button>
+                    )}
+                    <div>
+                        <h1 className="text-3xl font-bold text-foreground">
+                            {activeFolderId ? activeFolder?.name : 'Library'}
+                        </h1>
+                        <p className="text-foreground-secondary mt-1">
+                            {activeFolderId ? `${filteredDecks.length} decks in this folder` : 'Manage your decks and folders'}
+                        </p>
+                    </div>
                 </div>
                 <div className="flex items-center gap-3">
                     <div className="relative">
@@ -247,7 +273,7 @@ export default function MyDecksPage() {
             </FadeInUp>
 
             {/* Tabs */}
-            <div className="flex items-center gap-6 border-b border-border mb-8">
+            <div className={`flex items-center gap-6 border-b border-border mb-8 ${activeFolderId ? 'hidden' : ''}`}>
                 <button
                     onClick={() => setActiveTab('decks')}
                     className={`pb-4 text-sm font-bold transition-all relative ${activeTab === 'decks' ? 'text-brand-primary' : 'text-foreground-muted hover:text-foreground'}`}
@@ -255,7 +281,7 @@ export default function MyDecksPage() {
                     <div className="flex items-center gap-2">
                         <BookOpen className="w-4 h-4" />
                         <span>Decks</span>
-                        <span className="bg-surface-active px-2 py-0.5 rounded-full text-xs">{activeDecks.length}</span>
+                        <span className="bg-surface-active px-2 py-0.5 rounded-full text-xs">{activeDecks.filter(d => !d.folderId).length}</span>
                     </div>
                     {activeTab === 'decks' && (
                         <motion.div
@@ -317,7 +343,7 @@ export default function MyDecksPage() {
                         </FadeInUp>
 
                         {filteredDecks.map((d, index) => {
-                            const stats = getDeckStats(d.id, d.cards.length);
+                            const stats = getDeckStats(d.id, d.cards.map(c => c.id));
                             return (
                                 <LiquidDeckCard
                                     key={d.id}
@@ -380,6 +406,7 @@ export default function MyDecksPage() {
                                     setOpenDropdownId={setOpenDropdownId}
                                     handleOpenRenameFolder={handleOpenRenameFolder}
                                     handleDeleteFolder={handleDeleteFolder}
+                                    onClick={() => handleFolderClick(f.id)}
                                 />
                             );
                         })}
