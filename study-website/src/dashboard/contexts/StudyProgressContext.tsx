@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import { getSupabaseClient } from '../lib/supabase';
-import { useClerkSession } from '../lib/clerk';
+import { getSupabaseClient } from '../../lib/supabase';
+import { useClerkSession } from '../../lib/clerk';
 
 // ============================================
 // TYPES

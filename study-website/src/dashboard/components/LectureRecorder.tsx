@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mic, Square, Play, Pause, Trash2, Save, Lock, CheckCircle, Loader2 } from 'lucide-react';
-import { useProfile } from '../contexts/ProfileContext';
+import { useProfile } from '../../contexts/ProfileContext';
 import { useTranscripts } from '../contexts/TranscriptsContext';
 import { usePaywall } from '../contexts/PaywallContext'; // Added import for usePaywall
 

@@ -21,10 +21,10 @@ import {
     MessageSquare,
     Wand2
 } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
-import { useProfile } from '../contexts/ProfileContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useProfile } from '../../contexts/ProfileContext';
 import { usePaywall } from '../contexts/PaywallContext';
-import { useClerkSession } from '../lib/clerk';
+import { useClerkSession } from '../../lib/clerk';
 // import { PixelTransition } from './PixelTransition';
 
 interface LayoutProps {

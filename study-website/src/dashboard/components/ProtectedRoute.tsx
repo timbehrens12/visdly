@@ -1,6 +1,6 @@
 import React from 'react';
-import { useClerkSession } from '../lib/clerk';
-import { useProfile } from '../contexts/ProfileContext';
+import { useClerkSession } from '../../lib/clerk';
+import { useProfile } from '../../contexts/ProfileContext';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isLoading, isSignedIn } = useClerkSession();

@@ -1,7 +1,6 @@
 import { ClerkProvider, useAuth as useClerkAuthOriginal, useUser as useClerkUserOriginal, useClerk, SignIn, SignUp, UserButton, SignedIn as ClerkSignedIn, SignedOut as ClerkSignedOut } from '@clerk/clerk-react';
 import { type ReactNode } from 'react';
 
-// Clerk publishable key
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 export function ClerkAuthProvider({ children }: { children: ReactNode }) {
@@ -29,7 +28,6 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
     );
 }
 
-// Custom hooks that wrap Clerk's originals
 export function useAuth() {
     return useClerkAuthOriginal();
 }
@@ -46,10 +44,8 @@ export function SignedOut({ children }: { children: ReactNode }) {
     return <ClerkSignedOut>{children}</ClerkSignedOut>;
 }
 
-// Re-export other Clerk hooks and components
 export { useClerk, SignIn, SignUp, UserButton };
 
-// Helper hook for our specific app needs
 export function useClerkSession() {
     const { isLoaded, isSignedIn, userId, signOut, getToken } = useAuth();
     const { user } = useUser();

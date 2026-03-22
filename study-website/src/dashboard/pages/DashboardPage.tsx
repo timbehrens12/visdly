@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FadeInUp } from '../components/ui/MotionWrapper';
 import { useDecks, type Deck } from '../contexts/DecksContext';
 import { useStudyProgress } from '../contexts/StudyProgressContext';
-import { useClerkSession } from '../lib/clerk';
+import { useClerkSession } from '../../lib/clerk';
 import { CreateModal } from '../components/CreateModal';
 import { CreateFolderModal } from '../components/CreateFolderModal';
 

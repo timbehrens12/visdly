@@ -1,4 +1,3 @@
-import { ThemeProvider } from './contexts/ThemeContext';
 import { Routes, Route } from 'react-router-dom';
 import GamePage from './pages/GamePage';
 import { Layout } from './components/Layout';
@@ -18,22 +17,17 @@ import CanvasPage from './pages/CanvasPage';
 import NotificationsPage from './pages/NotificationsPage';
 import GeneratePage from './pages/GeneratePage';
 
-import { ProfileProvider } from './contexts/ProfileContext';
 import { PaywallProvider } from './contexts/PaywallContext';
 import { ChatProvider } from './contexts/ChatContext';
 import { TranscriptsProvider } from './contexts/TranscriptsContext';
-import { ClerkAuthProvider } from './lib/clerk';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import './dashboard.css';
 
 export function DashboardApp() {
   return (
     <div className="dashboard-root">
-      <ClerkAuthProvider>
-        <ProfileProvider>
         <ChatProvider>
           <TranscriptsProvider>
-            <ThemeProvider defaultTheme="system">
               <PaywallProvider>
                 <SettingsProvider>
                   <StudyProgressProvider>
@@ -69,11 +63,8 @@ export function DashboardApp() {
                   </StudyProgressProvider>
                 </SettingsProvider>
               </PaywallProvider>
-            </ThemeProvider>
           </TranscriptsProvider>
         </ChatProvider>
-      </ProfileProvider>
-    </ClerkAuthProvider>
     </div>
   );
 }

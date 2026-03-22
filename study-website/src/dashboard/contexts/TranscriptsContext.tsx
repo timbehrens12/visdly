@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
-import { useClerkSession } from '../lib/clerk';
+import { supabase } from '../../lib/supabase';
+import { useClerkSession } from '../../lib/clerk';
 
 export interface Transcript {
     id: string;

@@ -1,0 +1,7 @@
+﻿src/dashboard/components/CanvasMode.tsx(4,26): error TS2307: Cannot find module '../contexts/ThemeContext' or its corresponding type declarations.
+src/dashboard/components/LectureRecorder.tsx(4,28): error TS2307: Cannot find module '../contexts/ProfileContext' or its corresponding type declarations.
+src/dashboard/components/SettingsModal.tsx(5,26): error TS2307: Cannot find module '../contexts/ThemeContext' or its corresponding type declarations.
+src/dashboard/components/SpeakingGame.tsx(4,26): error TS2307: Cannot find module '../contexts/ThemeContext' or its corresponding type declarations.
+src/dashboard/components/TestGame.tsx(10,26): error TS2307: Cannot find module '../contexts/ThemeContext' or its corresponding type declarations.
+src/dashboard/components/ThemeToggle.tsx(2,26): error TS2307: Cannot find module '../contexts/ThemeContext' or its corresponding type declarations.
+src/OnboardingGuard.tsx(12,38): error TS2339: Property 'loading' does not exist on type 'ProfileContextType'.
