@@ -190,7 +190,7 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
             // 2. Cloud fetch
             if (isSignedIn) {
                 try {
-                    const token = await getToken();
+                    const token = await getToken({ template: 'supabase' });
                     const client = getSupabaseClient(token || undefined);
 
                     const { data: cloudProgress } = await client.from('study_progress').select('*');

@@ -124,7 +124,7 @@ export function DecksProvider({ children }: { children: ReactNode }) {
             // 2. If signed in, fetch from Cloud and sync
             if (isSignedIn) {
                 try {
-                    const token = await getToken();
+                    const token = await getToken({ template: 'supabase' });
                     const client = getSupabaseClient(token || undefined);
 
                     // Fetch folders
@@ -185,7 +185,7 @@ export function DecksProvider({ children }: { children: ReactNode }) {
     // Abstracted cloud sync helper
     const cloudRequest = async (operation: (client: any) => Promise<any>) => {
         if (!isSignedIn) return null;
-        const token = await getToken();
+        const token = await getToken({ template: 'supabase' });
         const client = getSupabaseClient(token || undefined);
         return operation(client);
     };

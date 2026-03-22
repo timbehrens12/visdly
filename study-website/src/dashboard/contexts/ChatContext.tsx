@@ -1,97 +1,112 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { supabase } from '../../lib/supabase';
+import { getSupabaseClient } from '../../lib/supabase';
 import { useClerkSession } from '../../lib/clerk';
 
-interface ChatMessage {
+export interface ChatMessage {
     id: string;
     profile_id: string;
     role: 'user' | 'assistant' | 'system';
     content: string;
+    course_context?: any;
+    deck_context?: any;
     created_at: string;
 }
 
 interface ChatContextType {
     messages: ChatMessage[];
     isLoading: boolean;
-    sendMessage: (content: string) => Promise<void>;
+    sendMessage: (content: string, context?: any) => Promise<void>;
     clearHistory: () => Promise<void>;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { userId, isSignedIn } = useClerkSession();
+    const { userId, isSignedIn, getToken } = useClerkSession();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchMessages = useCallback(async () => {
+    const loadChatHistory = useCallback(async () => {
         if (!userId) return;
         
         setIsLoading(true);
         try {
-            const { data, error } = await supabase
+            const token = await getToken({ template: 'supabase' });
+            const client = getSupabaseClient(token || undefined);
+
+            const { data, error } = await client
                 .from('chat_messages')
                 .select('*')
                 .eq('profile_id', userId)
-                .order('created_at', { ascending: true });
+                .order('created_at', { ascending: true })
+                .limit(50); // Get last 50 messages
 
             if (error) throw error;
             setMessages(data || []);
         } catch (err) {
-            console.error('Error fetching chat messages:', err);
+            console.error('Error loading chat history:', err);
         } finally {
             setIsLoading(false);
         }
-    }, [userId]);
+    }, [userId, getToken]);
 
     useEffect(() => {
         if (isSignedIn && userId) {
-            fetchMessages();
+            loadChatHistory();
         } else {
             setMessages([]);
             setIsLoading(false);
         }
-    }, [isSignedIn, userId, fetchMessages]);
+    }, [isSignedIn, userId, loadChatHistory]);
 
-    const sendMessage = async (content: string) => {
+    const sendMessage = async (content: string, context?: any) => {
         if (!userId || !content.trim()) return;
 
-        const userMessage: Partial<ChatMessage> = {
+        // Optimistic UI update
+        const tempId = `temp-${Date.now()}`;
+        const newMessage: ChatMessage = {
+            id: tempId,
             profile_id: userId,
             role: 'user',
-            content
-        };
-
-        // Optimistic update
-        const tempId = Date.now().toString();
-        const optimisticUserMessage: ChatMessage = {
-            ...userMessage,
-            id: tempId,
+            content,
             created_at: new Date().toISOString()
-        } as ChatMessage;
-
-        setMessages(prev => [...prev, optimisticUserMessage]);
+        };
+        setMessages(prev => [...prev, newMessage]);
 
         try {
-            const { data: savedUserMessage, error: userError } = await supabase
+            const token = await getToken({ template: 'supabase' });
+            const client = getSupabaseClient(token || undefined);
+
+            // 1. Save user message to DB
+            const userMessageToSave = {
+                profile_id: userId,
+                role: 'user',
+                content
+                // Add context if needed later
+            };
+
+            const { data: savedUserMessage, error: userError } = await client
                 .from('chat_messages')
-                .insert([userMessage])
+                .insert([userMessageToSave])
                 .select()
                 .single();
 
             if (userError) throw userError;
 
-            // Replace optimistic with real
+            // Update temp message with real ID
             setMessages(prev => prev.map(m => m.id === tempId ? savedUserMessage : m));
 
-            // Simulate assistant response for now (real logic would involve an edge function or worker)
-            const assistantMessage: Partial<ChatMessage> = {
+            // 2. Call AI logic here (placeholder)
+            // In reality, you'd send 'content' to an AI endpoint, get response, then save it
+            
+            // Placeholder: Mock AI response
+            const assistantMessage = {
                 profile_id: userId,
                 role: 'assistant', // Use assistant for AI
                 content: `Response to: ${content}`
             };
 
-            const { data: savedAssistantMessage, error: assistantError } = await supabase
+            const { data: savedAssistantMessage, error: assistantError } = await client
                 .from('chat_messages')
                 .insert([assistantMessage])
                 .select()
@@ -102,7 +117,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         } catch (err) {
             console.error('Error sending message:', err);
-            // Revert optimistic update on error?
+            // Revert optimistic update on error
             setMessages(prev => prev.filter(m => m.id !== tempId));
         }
     };
@@ -110,7 +125,10 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const clearHistory = async () => {
         if (!userId) return;
         try {
-            const { error } = await supabase
+            const token = await getToken({ template: 'supabase' });
+            const client = getSupabaseClient(token || undefined);
+
+            const { error } = await client
                 .from('chat_messages')
                 .delete()
                 .eq('profile_id', userId);

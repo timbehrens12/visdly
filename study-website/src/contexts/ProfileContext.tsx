@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, getSupabaseClient } from '../lib/supabase';
 import { useClerkSession } from '../lib/clerk';
 
 interface Profile {
@@ -25,14 +25,17 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { userId, userEmail, userName, userImageUrl, isSignedIn } = useClerkSession();
+    const { userId, userEmail, userName, userImageUrl, isSignedIn, getToken } = useClerkSession();
     const [profile, setProfile] = useState<Profile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<any>(null);
 
     const fetchProfile = useCallback(async (clerkId: string) => {
         try {
-            const { data, error: fetchError } = await supabase
+            const token = await getToken({ template: 'supabase' });
+            const client = getSupabaseClient(token || undefined);
+
+            const { data, error: fetchError } = await client
                 .from('profiles')
                 .select('*')
                 .eq('id', clerkId)
@@ -41,7 +44,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
             if (fetchError) {
                 if (fetchError.code === 'PGRST116') {
                     // Profile doesn't exist, create it
-                    const { data: newProfile, error: createError } = await supabase
+                    const { data: newProfile, error: createError } = await client
                         .from('profiles')
                         .insert([
                             {
@@ -94,7 +97,10 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (!userId) return;
         
         try {
-            const { error: updateError } = await supabase
+            const token = await getToken({ template: 'supabase' });
+            const client = getSupabaseClient(token || undefined);
+
+            const { error: updateError } = await client
                 .from('profiles')
                 .update({
                     ...updates,

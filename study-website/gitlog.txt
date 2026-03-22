@@ -1,0 +1,162 @@
+﻿commit d8aa03235e2bafd96cb161ba881305a808a67fe4
+Author: Kortezbis <kortezjohnsonbusiness@gmail.com>
+Date:   Sun Mar 22 02:01:15 2026 -0500
+
+    chore: consolidate providers and fix build errors
+
+ study-website/out.txt                              |   7 +
+ study-website/src/OnboardingGuard.tsx              |   4 +-
+ study-website/src/contexts/ProfileContext.tsx      | 181 +++++++++++++--------
+ study-website/src/dashboard/App.tsx                |  81 ---------
+ study-website/src/dashboard/DashboardApp.tsx       |   9 -
+ .../src/dashboard/components/CanvasMode.tsx        |   2 +-
+ study-website/src/dashboard/components/Layout.tsx  |   6 +-
+ .../src/dashboard/components/LectureRecorder.tsx   |   2 +-
+ .../src/dashboard/components/ProtectedRoute.tsx    |   4 +-
+ .../src/dashboard/components/SettingsModal.tsx     |   2 +-
+ .../src/dashboard/components/SpeakingGame.tsx      |   2 +-
+ .../src/dashboard/components/TestGame.tsx          |   2 +-
+ .../src/dashboard/components/ThemeToggle.tsx       |   2 +-
+ .../src/dashboard/contexts/ChatContext.tsx         |   4 +-
+ .../src/dashboard/contexts/DecksContext.tsx        |   4 +-
+ .../src/dashboard/contexts/ProfileContext.tsx      | 131 ---------------
+ .../dashboard/contexts/StudyProgressContext.tsx    |   4 +-
+ .../src/dashboard/contexts/ThemeContext.tsx        | 107 ------------
+ .../src/dashboard/contexts/TranscriptsContext.tsx  |   4 +-
+ study-website/src/dashboard/lib/clerk.tsx          |  63 -------
+ study-website/src/dashboard/lib/supabase.ts        |  27 ---
+ study-website/src/dashboard/main.tsx               |  10 --
+ .../src/dashboard/pages/DashboardPage.tsx          |   2 +-
+ study-website/src/dashboard/pages/GamePage.tsx     |   4 +-
+ .../src/dashboard/pages/SummarizersPage.tsx        |   2 +-
+ study-website/src/lib/clerk.tsx                    |   4 -
+ study-website/src/lib/supabase.ts                  |  18 +-
+ 27 files changed, 160 insertions(+), 528 deletions(-)
+
+commit 6320db51407a89f66d7489b7ac824ffd12f21461
+Author: Kortezbis <kortezjohnsonbusiness@gmail.com>
+Date:   Sun Mar 22 01:53:00 2026 -0500
+
+    Fix unused imports and variables to resolve build errors
+
+ study-website/package-lock.json                    | 1543 +++++++++++++++++---
+ study-website/package.json                         |    4 +-
+ study-website/src/App.tsx                          |    4 +-
+ .../src/dashboard/components/CanvasMode.tsx        |    5 -
+ .../src/dashboard/components/PaywallModal.tsx      |    2 +-
+ .../components/learn-mode/TeachingCard.tsx         |    5 +-
+ .../learn-mode/sub-components/MatchingMini.tsx     |   10 +-
+ .../learn-mode/sub-components/RapidFireMini.tsx    |    3 +-
+ .../src/dashboard/contexts/DebugContext.tsx        |    2 +-
+ .../src/dashboard/contexts/DecksContext.tsx        |   10 +-
+ .../dashboard/contexts/StudyProgressContext.tsx    |    2 +-
+ .../src/dashboard/pages/SummarizersPage.tsx        |    2 +-
+ study-website/tsconfig.app.json                    |    4 +-
+ 13 files changed, 1364 insertions(+), 232 deletions(-)
+
+commit 771bb3fef6e57a7900905326a0c7bfc2afc9c432
+Author: Kortezbis <kortezjohnsonbusiness@gmail.com>
+Date:   Sun Mar 22 01:48:37 2026 -0500
+
+    Fix build errors and type mismatches in dashboard components
+
+ study-website/src/dashboard/App.tsx                |   81 ++
+ study-website/src/dashboard/DashboardApp.tsx       |   81 ++
+ study-website/src/dashboard/assets/react.svg       |    1 +
+ .../src/dashboard/components/CanvasMode.tsx        |  285 ++++
+ .../src/dashboard/components/CreateFolderModal.tsx |  131 ++
+ .../src/dashboard/components/CreateModal.tsx       |  195 +++
+ .../dashboard/components/DashboardEmptyState.tsx   |  123 ++
+ .../src/dashboard/components/DeckSettingsModal.tsx |  194 +++
+ .../src/dashboard/components/FlashcardGame.tsx     |  611 +++++++++
+ study-website/src/dashboard/components/Layout.tsx  |  338 +++++
+ .../src/dashboard/components/LectureRecorder.tsx   |  292 ++++
+ .../src/dashboard/components/MatchGame.tsx         |  372 ++++++
+ .../src/dashboard/components/MoveDeckModal.tsx     |  175 +++
+ .../src/dashboard/components/PaywallModal.tsx      |  140 ++
+ .../src/dashboard/components/ProtectedRoute.tsx    |   34 +
+ .../src/dashboard/components/RapidFireQuiz.tsx     |  393 ++++++
+ .../src/dashboard/components/SettingsModal.tsx     |  854 ++++++++++++
+ .../src/dashboard/components/SpeakingGame.tsx      |  452 +++++++
+ .../src/dashboard/components/StreakCalendar.tsx    |  304 +++++
+ .../src/dashboard/components/StudyModesModal.tsx   |  161 +++
+ .../src/dashboard/components/TestGame.tsx          |  714 ++++++++++
+ .../src/dashboard/components/ThemeToggle.tsx       |   22 +
+ .../src/dashboard/components/TranscriptView.tsx    |   29 +
+ .../src/dashboard/components/WrittenGame.tsx       |  657 +++++++++
+ .../components/learn-mode/CompletionScreen.tsx     |   93 ++
+ .../components/learn-mode/ExplanationCard.tsx      |   71 +
+ .../dashboard/components/learn-mode/IntroCard.tsx  |   92 ++
+ .../dashboard/components/learn-mode/LearnMode.tsx  | 1402 ++++++++++++++++++++
+ .../components/learn-mode/ProgressBar.tsx          |   37 +
+ .../components/learn-mode/QuestionCard.tsx         |   78 ++
+ .../components/learn-mode/TeachingCard.tsx         |  142 ++
+ .../sub-components/FillBlankQuestion.tsx           |   67 +
+ .../learn-mode/sub-components/MCQQuestion.tsx      |   37 +
+ .../learn-mode/sub-components/MatchingMini.tsx     |   92 ++
+ .../learn-mode/sub-components/RapidFireMini.tsx    |  110 ++
+ .../learn-mode/sub-components/WrittenQuestion.tsx  |   74 ++
+ .../src/dashboard/components/learn-mode/types.ts   |   51 +
+ .../components/learn-mode/utils/aiExplanations.ts  |  117 ++
+ .../components/learn-mode/utils/lcsGrading.ts      |   56 +
+ .../learn-mode/utils/questionGenerator.ts          |   61 +
+ .../components/learn-mode/utils/textToSpeech.ts    |   27 +
+ .../src/dashboard/components/ui/FolderCard.tsx     |  160 +++
+ .../src/dashboard/components/ui/LiquidDeckCard.tsx |  176 +++
+ .../src/dashboard/components/ui/MotionWrapper.tsx  |   51 +
+ .../src/dashboard/components/ui/RecentDeckCard.tsx |   88 ++
+ .../src/dashboard/components/ui/Toggle.tsx         |   23 +
+ .../src/dashboard/contexts/ChatContext.tsx         |  138 ++
+ .../src/dashboard/contexts/ClassesContext.tsx      |  303 +++++
+ .../src/dashboard/contexts/DebugContext.tsx        |   28 +
+ .../src/dashboard/contexts/DecksContext.tsx        |  534 ++++++++
+ .../src/dashboard/contexts/PaywallContext.tsx      |   58 +
+ .../src/dashboard/contexts/ProfileContext.tsx      |  131 ++
+ .../src/dashboard/contexts/SettingsContext.tsx     |  305 +++++
+ .../src/dashboard/contexts/SidebarContext.tsx      |   25 +
+ .../dashboard/contexts/StudyProgressContext.tsx    |  557 ++++++++
+ .../src/dashboard/contexts/ThemeContext.tsx        |  107 ++
+ .../src/dashboard/contexts/TranscriptsContext.tsx  |  117 ++
+ study-website/src/dashboard/dashboard.css          | 1202 +++++++++++++++++
+ study-website/src/dashboard/lib/clerk.tsx          |   63 +
+ study-website/src/dashboard/lib/generateCards.ts   |  310 +++++
+ study-website/src/dashboard/lib/supabase.ts        |   27 +
+ study-website/src/dashboard/main.tsx               |   10 +
+ study-website/src/dashboard/pages/CanvasPage.tsx   |   14 +
+ study-website/src/dashboard/pages/ChatPage.tsx     |  212 +++
+ study-website/src/dashboard/pages/ClassesPage.tsx  |  744 +++++++++++
+ .../src/dashboard/pages/DashboardPage.tsx          |  243 ++++
+ study-website/src/dashboard/pages/EditDeckPage.tsx |  303 +++++
+ study-website/src/dashboard/pages/GamePage.tsx     |  531 ++++++++
+ study-website/src/dashboard/pages/GeneratePage.tsx |  598 +++++++++
+ study-website/src/dashboard/pages/MatchGame.tsx    |  157 +++
+ study-website/src/dashboard/pages/MyDecksPage.tsx  |  512 +++++++
+ .../src/dashboard/pages/NotificationsPage.tsx      |  118 ++
+ study-website/src/dashboard/pages/RecordPage.tsx   |   21 +
+ .../src/dashboard/pages/SummarizersPage.tsx        |   95 ++
+ .../src/dashboard/pages/TranscriptPage.tsx         |  193 +++
+ study-website/src/dashboard/styles/designTokens.ts |  258 ++++
+ study-website/src/dashboard/styles/stars.css       |   37 +
+ 77 files changed, 17695 insertions(+)
+
+commit fc8466f960b66287d145b7325c93c47aed5f018e
+Author: Kortezbis <kortezjohnsonbusiness@gmail.com>
+Date:   Sun Mar 22 01:38:29 2026 -0500
+
+    Fix dashboard routing and Supabase profile types
+
+ studylayer-dashboard/src/App.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit c353fa2bf17cc77184a910acd413533bcb960e97
+Author: Kortezbis <kortezjohnsonbusiness@gmail.com>
+Date:   Sun Mar 22 01:26:45 2026 -0500
+
+    Fix build errors and update dependencies
+
+ study-website/build_errors.txt                     | Bin 0 -> 794 bytes
+ study-website/package-lock.json                    |  69 +++++++++++++++++++--
+ study-website/package.json                         |   3 +-
+ .../src/components/account/AccountPopover.tsx      |   2 +-
+ .../src/components/account/AccountSettings.tsx     |   4 +-
+ 5 files changed, 68 insertions(+), 10 deletions(-)
