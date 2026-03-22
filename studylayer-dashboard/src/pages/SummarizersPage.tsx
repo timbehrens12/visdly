@@ -1,6 +1,6 @@
 import { useProfile } from '../contexts/ProfileContext';
 import { usePaywall } from '../contexts/PaywallContext';
-import { Sparkles, Zap, FileText, Brain, Layout, ListChecks, CheckCircle2, Lock } from 'lucide-react';
+import { FileText, CheckCircle } from 'lucide-react';
 import { FadeInUp } from '../components/ui/MotionWrapper';
 
 export default function SummarizersPage() {
@@ -42,7 +42,7 @@ export default function SummarizersPage() {
                                     "Smart Reading Outlines"
                                 ].map((feature) => (
                                     <div key={feature} className="flex items-center gap-3 text-sm font-bold text-foreground-secondary bg-background/50 p-4 rounded-2xl border border-border/50">
-                                        <CheckCircle2 className="w-4 h-4 text-brand-primary shrink-0" />
+                                        <CheckCircle className="w-4 h-4 text-brand-primary shrink-0" />
                                         <span>{feature}</span>
                                     </div>
                                 ))}

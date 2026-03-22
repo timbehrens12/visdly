@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mic, Square, Play, Pause, Trash2, Save, Lock, CheckCircle2, Loader2 } from 'lucide-react';
+import { Mic, Square, Play, Pause, Trash2, Save, Lock, CheckCircle, Loader2 } from 'lucide-react';
 import { useProfile } from '../contexts/ProfileContext';
 import { useTranscripts } from '../contexts/TranscriptsContext';
 import { usePaywall } from '../contexts/PaywallContext'; // Added import for usePaywall
@@ -157,15 +157,15 @@ export const LectureRecorder: React.FC = () => {
                     
                     <div className="flex flex-col gap-4 w-full max-w-xs">
                         <div className="flex items-center gap-3 text-sm font-medium text-foreground-secondary bg-background/50 p-3 rounded-xl border border-border">
-                            <CheckCircle2 className="w-4 h-4 text-brand-primary shrink-0" />
+                            <CheckCircle className="w-4 h-4 text-brand-primary shrink-0" />
                             <span>Unlimited Lecture Recording</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm font-medium text-foreground-secondary bg-background/50 p-3 rounded-xl border border-border">
-                            <CheckCircle2 className="w-4 h-4 text-brand-primary shrink-0" />
+                            <CheckCircle className="w-4 h-4 text-brand-primary shrink-0" />
                             <span>AI-Powered Notes Generation</span>
                         </div>
                         <div className="flex items-center gap-3 text-sm font-medium text-foreground-secondary bg-background/50 p-3 rounded-xl border border-border">
-                            <CheckCircle2 className="w-4 h-4 text-brand-primary shrink-0" />
+                            <CheckCircle className="w-4 h-4 text-brand-primary shrink-0" />
                             <span>Sync with Mobile & Desktop App</span>
                         </div>
                     </div>

@@ -3,10 +3,6 @@ import { motion } from 'framer-motion';
 import { PenTool, Move, Undo, Trash2, Minus, Plus, Eraser, ChevronLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
-import { useSidebar } from '../contexts/SidebarContext';
-import { useProfile } from '../contexts/ProfileContext';
-import { FadeInUp } from './ui/MotionWrapper';
-import { CheckCircle2, Layout as LayoutIcon } from 'lucide-react';
 
 interface Stroke {
     points: { x: number; y: number }[];
@@ -20,7 +16,6 @@ export function CanvasMode() {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const { resolvedTheme } = useTheme();
     const navigate = useNavigate();
-    const { setHideSidebar } = useSidebar();
 
     // Tools state
     const [tool, setTool] = useState<'pen' | 'eraser' | 'pan'>('pen');
@@ -170,7 +165,7 @@ export function CanvasMode() {
             <motion.button
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                onClick={handleBack}
+                onClick={() => navigate('/dashboard')}
                 className="absolute top-6 left-6 z-40 p-2 bg-background-elevated border border-border rounded-xl shadow-lg hover:bg-surface-hover text-foreground-secondary transition-colors"
                 title="Exit Canvas"
             >

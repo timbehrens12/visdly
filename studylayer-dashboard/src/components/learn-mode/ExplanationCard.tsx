@@ -8,9 +8,9 @@ interface ExplanationCardProps {
 }
 
 export function ExplanationCard({ card, onRetry }: ExplanationCardProps) {
-    const { aiExplanation } = card;
+    const { teachingContent } = card;
 
-    if (!aiExplanation) return null;
+    if (!teachingContent) return null;
 
     return (
         <motion.div
@@ -31,7 +31,7 @@ export function ExplanationCard({ card, onRetry }: ExplanationCardProps) {
                     </div>
                     <h4 className="text-xs font-black uppercase tracking-widest text-foreground-muted mb-2">ELI5 Explanation</h4>
                     <p className="text-sm text-foreground-secondary leading-relaxed">
-                        {aiExplanation.eli5}
+                        {teachingContent.eli5}
                     </p>
                 </div>
 
@@ -42,7 +42,7 @@ export function ExplanationCard({ card, onRetry }: ExplanationCardProps) {
                     </div>
                     <h4 className="text-xs font-black uppercase tracking-widest text-foreground-muted mb-2">Memory Trick</h4>
                     <p className="text-sm text-foreground-secondary leading-relaxed">
-                        {aiExplanation.mnemonic}
+                        {teachingContent.headline}
                     </p>
                 </div>
 
@@ -53,7 +53,7 @@ export function ExplanationCard({ card, onRetry }: ExplanationCardProps) {
                     </div>
                     <h4 className="text-xs font-black uppercase tracking-widest text-foreground-muted mb-2">Real World Example</h4>
                     <p className="text-sm text-foreground-secondary leading-relaxed font-italic">
-                        {aiExplanation.realWorldExample}
+                        {teachingContent.realWorldExamples && teachingContent.realWorldExamples[0]}
                     </p>
                 </div>
             </div>

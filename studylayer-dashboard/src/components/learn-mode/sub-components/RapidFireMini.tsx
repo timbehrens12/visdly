@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Timer, CheckCircle, XCircle } from 'lucide-react';
+import { Zap, Timer } from 'lucide-react';
 import { type LearnCard } from '../types';
 
 interface RapidFireMiniProps {

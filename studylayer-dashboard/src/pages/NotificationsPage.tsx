@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FadeInUp } from '../components/ui/MotionWrapper';
-import { ArrowLeft, Flame, BookOpen, Clock, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Flame, BookOpen, Clock, AlertCircle, CheckCircle } from 'lucide-react';
 
 export default function NotificationsPage() {
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ export default function NotificationsPage() {
             title: "Deck Completed",
             message: "You've mastered all cards in \"History 101\"!",
             time: "1 week ago",
-            icon: CheckCircle2,
+            icon: CheckCircle,
             color: "text-purple-500",
             bg: "bg-purple-500/10",
             read: true

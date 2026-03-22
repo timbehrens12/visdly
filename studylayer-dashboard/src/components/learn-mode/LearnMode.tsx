@@ -10,7 +10,7 @@ import {
 import { CompletionScreen } from './CompletionScreen';
 import { generateTeachingContent } from './utils/aiExplanations';
 import { gradeWrittenAnswer } from './utils/lcsGrading';
-import { CheckCircle2, XCircle, Volume2, Square, Lightbulb, BookOpen, Sparkles, Mic } from 'lucide-react';
+import { CheckCircle, XCircle, Volume2, Square, Lightbulb, BookOpen, Sparkles, Mic } from 'lucide-react';
 
 // ============================================
 // TYPES
@@ -244,7 +244,7 @@ function WrittenQuestion({ card, onAnswer, onSkip }: WrittenQuestionProps) {
                     >
                         <div className="flex items-center gap-2 mb-2">
                             {isCorrect ? (
-                                <CheckCircle2 className="w-5 h-5 text-success" />
+                                <CheckCircle className="w-5 h-5 text-success" />
                             ) : (
                                 <XCircle className="w-5 h-5 text-error" />
                             )}
@@ -398,7 +398,7 @@ function FillBlankQuestion({ card, onAnswer, onSkip }: FillBlankQuestionProps) {
                     >
                         <div className="flex items-center gap-2">
                             {isCorrect ? (
-                                <CheckCircle2 className="w-5 h-5 text-success" />
+                                <CheckCircle className="w-5 h-5 text-success" />
                             ) : (
                                 <XCircle className="w-5 h-5 text-error" />
                             )}
@@ -592,7 +592,7 @@ function SpeakingQuestion({ card, onAnswer, onSkip }: SpeakingQuestionProps) {
                         </>
                     ) : (
                         <div className={`w-20 h-20 rounded-full flex items-center justify-center ${isCorrect ? 'bg-success' : 'bg-error'}`}>
-                            {isCorrect ? <CheckCircle2 className="w-8 h-8 text-white" /> : <XCircle className="w-8 h-8 text-white" />}
+                            {isCorrect ? <CheckCircle className="w-8 h-8 text-white" /> : <XCircle className="w-8 h-8 text-white" />}
                         </div>
                     )}
 

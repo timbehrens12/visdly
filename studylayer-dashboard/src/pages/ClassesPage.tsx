@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Plus, Calendar, CheckCircle2, Clock,
+    Plus, Calendar, CheckCircle, Clock,
     MoreVertical, Trash2, Edit3, X, GraduationCap,
     AlertCircle, ChevronRight, FileText, Target
 } from 'lucide-react';
@@ -532,7 +532,7 @@ function ClassDetailView({ classData, onBack }: { classData: StudyClass; onBack:
                                                     : 'border-border hover:border-success'
                                                     }`}
                                             >
-                                                {item.completed && <CheckCircle2 className="w-4 h-4" />}
+                                                {item.completed && <CheckCircle className="w-4 h-4" />}
                                             </button>
 
                                             <div className="flex-1 min-w-0">

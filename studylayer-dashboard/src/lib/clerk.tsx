@@ -1,25 +1,26 @@
 import { ClerkProvider, useAuth as useClerkAuthOriginal, useUser as useClerkUserOriginal, useClerk, SignIn, SignUp, UserButton, SignedIn as ClerkSignedIn, SignedOut as ClerkSignedOut } from '@clerk/clerk-react';
 import { type ReactNode } from 'react';
 
-// Clerk publishable key
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 export function ClerkAuthProvider({ children }: { children: ReactNode }) {
     if (!CLERK_PUBLISHABLE_KEY) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-slate-900 p-8">
-                <div className="max-w-md w-full bg-slate-800 p-8 rounded-2xl shadow-2xl border-t-4 border-amber-500">
-                    <h1 className="text-2xl font-bold text-white mb-4">⚠️ Configuration Missing</h1>
-                    <p className="text-slate-300 mb-6 font-medium">
-                        Dashboard: Your <b>Clerk Publishable Key</b> is missing from <code>.env</code>. 
+            <div className="flex items-center justify-center min-h-screen bg-slate-100 p-8">
+                <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border-t-4 border-amber-500">
+                    <h1 className="text-2xl font-bold text-slate-900 mb-4">⚠️ Configuration Missing</h1>
+                    <p className="text-slate-600 mb-6 font-medium">
+                        Your <b>Clerk Publishable Key</b> is missing from <code>.env.local</code>. 
+                        Please add it to enable authentication features.
                     </p>
-                    <div className="bg-slate-900 p-4 rounded-lg font-mono text-xs text-slate-500">
+                    <div className="bg-slate-50 p-4 rounded-lg font-mono text-xs text-slate-500">
                         VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
                     </div>
                 </div>
             </div>
         );
     }
+
     return (
         <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
             {children}
@@ -27,7 +28,6 @@ export function ClerkAuthProvider({ children }: { children: ReactNode }) {
     );
 }
 
-// Custom hooks that wrap Clerk's originals
 export function useAuth() {
     return useClerkAuthOriginal();
 }

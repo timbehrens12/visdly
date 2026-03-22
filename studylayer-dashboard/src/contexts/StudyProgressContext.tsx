@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import { supabase, getSupabaseClient } from '../lib/supabase';
+import { getSupabaseClient } from '../lib/supabase';
 import { useClerkSession } from '../lib/clerk';
 
 // ============================================
@@ -190,7 +190,7 @@ export function StudyProgressProvider({ children }: { children: ReactNode }) {
             // 2. Cloud fetch
             if (isSignedIn) {
                 try {
-                    const token = await getToken();
+                    const token = await getToken({ template: 'supabase' });
                     const client = getSupabaseClient(token || undefined);
 
                     const { data: cloudProgress } = await client.from('study_progress').select('*');

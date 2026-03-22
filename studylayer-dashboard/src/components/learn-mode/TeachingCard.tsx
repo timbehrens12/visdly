@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, ChevronDown, ChevronUp, BookOpen, Lightbulb, Activity, BrainCircuit } from 'lucide-react';
+import { Volume2, BookOpen, Lightbulb, Activity, BrainCircuit } from 'lucide-react';
 import { type LearnCard } from './types';
 import { speakText } from './utils/textToSpeech';
 
 interface TeachingCardProps {
     card: LearnCard;
     onNext: () => void;
-    autoPlay: boolean;
 }
 
-export function TeachingCard({ card, onNext, autoPlay }: TeachingCardProps) {
+export function TeachingCard({ card, onNext }: TeachingCardProps) {
     const [level, setLevel] = useState<'standard' | 'eli5' | 'detailed'>('standard');
     const content = card.teachingContent;
 

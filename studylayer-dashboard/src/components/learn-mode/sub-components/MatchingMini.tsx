@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { type LearnCard } from '../types';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface MatchingMiniProps {
     card: LearnCard;
@@ -15,15 +15,15 @@ export function MatchingMini({ card, neighbors, onComplete }: MatchingMiniProps)
         ...neighbors.slice(0, 2).map(c => ({ id: c.id, term: c.term, definition: c.definition }))
     ];
 
-    const [leftCols, setLeftCols] = useState(() => pairs.sort(() => Math.random() - 0.5));
-    const [rightCols, setRightCols] = useState(() => pairs.sort(() => Math.random() - 0.5));
+    const [leftCols] = useState(() => pairs.sort(() => Math.random() - 0.5));
+    const [rightCols] = useState(() => pairs.sort(() => Math.random() - 0.5));
 
-    const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
-    const [selectedRight, setSelectedRight] = useState<number | null>(null);
-    const [matches, setMatches] = useState<number[]>([]);
-    const [attempts, setAttempts] = useState(0);
+    const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
+    const [selectedRight, setSelectedRight] = useState<string | null>(null);
+    const [matches, setMatches] = useState<string[]>([]);
+    const [, setAttempts] = useState(0);
 
-    const handleMatch = (leftId: number, rightId: number) => {
+    const handleMatch = (leftId: string, rightId: string) => {
         if (leftId === rightId) {
             setMatches(m => [...m, leftId]);
             setSelectedLeft(null);

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, CheckCircle2, XCircle, ChevronRight, X, HelpCircle } from 'lucide-react';
+import { Send, CheckCircle, XCircle, ChevronRight, X, HelpCircle } from 'lucide-react';
 
 
 interface WrittenGameProps {
@@ -220,7 +220,7 @@ function StandardWrittenGame({ settings, cards }: WrittenGameProps) {
                                         <p className="text-xs font-bold text-foreground-muted uppercase mb-1">{cards[res.itemIdx].term}</p>
                                         <div className="flex items-center gap-2">
                                             {res.similarity >= settings.similarityThreshold ? (
-                                                <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
+                                                <CheckCircle className="w-4 h-4 text-success shrink-0" />
                                             ) : (
                                                 <XCircle className="w-4 h-4 text-error shrink-0" />
                                             )}
@@ -345,7 +345,7 @@ function StandardWrittenGame({ settings, cards }: WrittenGameProps) {
                                 <div className="flex items-center gap-4">
                                     {currentSimilarity >= settings.similarityThreshold ? (
                                         <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center text-success">
-                                            <CheckCircle2 className="w-6 h-6" />
+                                            <CheckCircle className="w-6 h-6" />
                                         </div>
                                     ) : (
                                         <div className="w-12 h-12 bg-error/10 rounded-full flex items-center justify-center text-error">
@@ -599,7 +599,7 @@ function WordRevealGame({ settings, cards }: WrittenGameProps) {
 
                         {status === 'win' && (
                             <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex items-center gap-4 bg-success/10 px-6 py-2 rounded-2xl border border-success/20">
-                                <span className="text-success font-black text-lg uppercase tracking-widest flex items-center gap-2"><CheckCircle2 className="w-5 h-5" /> Correct!</span>
+                                <span className="text-success font-black text-lg uppercase tracking-widest flex items-center gap-2"><CheckCircle className="w-5 h-5" /> Correct!</span>
                                 <button onClick={nextCard} className="px-4 py-1.5 bg-success text-white rounded-lg text-sm font-bold hover:shadow-lg hover:scale-105 transition-all">Next</button>
                             </motion.div>
                         )}

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Volume2, ChevronRight, Zap } from 'lucide-react';
-import { readAloud } from './utils/textToSpeech';
+import { speakText } from './utils/textToSpeech';
 import { type LearnCard } from './types';
 import { useEffect, useState } from 'react';
 
@@ -16,7 +16,7 @@ export function IntroCard({ card, onContinue, autoPlay }: IntroCardProps) {
 
     useEffect(() => {
         if (autoPlay) {
-            readAloud(`${card.term}. ${card.definition}`);
+            speakText(`${card.term}. ${card.definition}`);
         }
 
         const timer = setInterval(() => {
@@ -63,7 +63,7 @@ export function IntroCard({ card, onContinue, autoPlay }: IntroCardProps) {
 
             <div className="flex flex-col items-center gap-6">
                 <button
-                    onClick={() => readAloud(`${card.term}. ${card.definition}`)}
+                    onClick={() => speakText(`${card.term}. ${card.definition}`)}
                     className="flex items-center gap-2 text-sm font-bold text-brand-primary hover:text-brand-primary/80 transition-colors uppercase tracking-widest"
                 >
                     <Volume2 className="w-4 h-4" />

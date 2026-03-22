@@ -26,9 +26,9 @@ import type { Card } from '../contexts/DecksContext';
 interface SortableCardProps {
     card: Card;
     index: number;
-    updateCard: (id: number, updates: Partial<Card>) => void;
-    deleteCard: (id: number) => void;
-    handleImageUpload: (id: number) => void;
+    updateCard: (id: string, updates: Partial<Card>) => void;
+    deleteCard: (id: string) => void;
+    handleImageUpload: (id: string) => void;
 }
 
 function SortableCard({ card, index, updateCard, deleteCard, handleImageUpload }: SortableCardProps) {
@@ -154,10 +154,12 @@ export default function EditDeckPage() {
             }
         } else if (!activeDeck) {
             // No deck ID and no active deck - create a new one
-            const newDeckId = createDeck('Untitled Deck');
-            setActiveDeck(newDeckId);
+            (async () => {
+                const newDeckId = await createDeck('Untitled Deck');
+                setActiveDeck(newDeckId);
+            })();
         }
-    }, [deckId]);
+    }, [deckId, activeDeck]);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -188,7 +190,7 @@ export default function EditDeckPage() {
         }, 100);
     };
 
-    const handleImageUpload = (id: number) => {
+    const handleImageUpload = (id: string) => {
         // In a real app, this would open a file picker
         const url = prompt("Enter image URL (mock):");
         if (url) {

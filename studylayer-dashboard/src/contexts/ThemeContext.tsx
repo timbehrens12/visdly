@@ -11,7 +11,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const THEME_STORAGE_KEY = 'studylayer-theme';
+const THEME_STORAGE_KEY = 'viszmo-theme';
 
 function getSystemTheme(): 'light' | 'dark' {
     if (typeof window !== 'undefined') {

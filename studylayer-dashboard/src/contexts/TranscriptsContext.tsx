@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
+import { getSupabaseClient } from '../lib/supabase';
 import { useClerkSession } from '../lib/clerk';
 
 export interface Transcript {
@@ -23,7 +23,7 @@ interface TranscriptsContextType {
 const TranscriptsContext = createContext<TranscriptsContextType | undefined>(undefined);
 
 export const TranscriptsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { userId, isSignedIn } = useClerkSession();
+    const { userId, isSignedIn, getToken } = useClerkSession();
     const [transcripts, setTranscripts] = useState<Transcript[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -32,7 +32,10 @@ export const TranscriptsProvider: React.FC<{ children: React.ReactNode }> = ({ c
         
         setIsLoading(true);
         try {
-            const { data, error } = await supabase
+            const token = await getToken({ template: 'supabase' });
+            const client = getSupabaseClient(token || undefined);
+
+            const { data, error } = await client
                 .from('transcripts')
                 .select('*')
                 .eq('profile_id', userId)
@@ -45,7 +48,7 @@ export const TranscriptsProvider: React.FC<{ children: React.ReactNode }> = ({ c
         } finally {
             setIsLoading(false);
         }
-    }, [userId]);
+    }, [userId, getToken]);
 
     useEffect(() => {
         if (isSignedIn && userId) {
@@ -65,7 +68,10 @@ export const TranscriptsProvider: React.FC<{ children: React.ReactNode }> = ({ c
         };
 
         try {
-            const { data, error } = await supabase
+            const token = await getToken({ template: 'supabase' });
+            const client = getSupabaseClient(token || undefined);
+
+            const { data, error } = await client
                 .from('transcripts')
                 .insert([transcriptToSave])
                 .select()
@@ -83,7 +89,10 @@ export const TranscriptsProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const deleteTranscript = async (id: string) => {
         if (!userId) return;
         try {
-            const { error } = await supabase
+            const token = await getToken({ template: 'supabase' });
+            const client = getSupabaseClient(token || undefined);
+
+            const { error } = await client
                 .from('transcripts')
                 .delete()
                 .eq('id', id)

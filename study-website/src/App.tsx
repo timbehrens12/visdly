@@ -214,12 +214,7 @@ function LandingPage() {
 
   return (
     <div
-      className="relative min-h-screen font-sans overflow-x-hidden text-slate-900"
-      style={{
-        backgroundColor: '#ffffff',
-        minHeight: '100vh',
-        width: '100%'
-      }}
+      className="relative min-h-screen font-sans overflow-x-hidden"
     >
       {/* Light Mesh Gradient Background */}
       <div className="fixed inset-0 -z-20 overflow-hidden pointer-events-none">

@@ -13,7 +13,7 @@ import {
     Import,
     StickyNote,
     Square,
-    CheckCircle2,
+    CheckCircle,
     AlertCircle,
     FileText,
     Loader2
@@ -334,7 +334,7 @@ export default function GeneratePage() {
                                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                                 className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center"
                             >
-                                <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+                                <CheckCircle className="w-10 h-10 text-emerald-500" />
                             </motion.div>
                             <div>
                                 <h2 className="text-2xl font-black mb-1 tracking-tight">Deck Created!</h2>

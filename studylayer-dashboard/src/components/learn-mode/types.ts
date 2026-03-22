@@ -1,4 +1,4 @@
-export type QuestionType = 'multiple-choice' | 'written' | 'true-false';
+export type QuestionType = 'multiple-choice' | 'written' | 'true-false' | 'fill-blank' | 'rapid-fire' | 'matching';
 
 export type LearnGoal = 'study' | 'learn';
 

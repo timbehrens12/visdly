@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MicOff, CheckCircle2, AlertCircle, ChevronRight, Mic, Square } from 'lucide-react';
+import { MicOff, CheckCircle, AlertCircle, ChevronRight, Mic, Square } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 
@@ -400,7 +400,7 @@ export function SpeakingGame({ settings, cards }: SpeakingGameProps) {
                                 {settings.feedbackMode === 'test' ? (
                                     <>Answer Recorded</>
                                 ) : (
-                                    <><CheckCircle2 className="w-6 h-6" /> Got it! {answer}</>
+                                    <><CheckCircle className="w-6 h-6" /> Got it! {answer}</>
                                 )}
                             </span>
                         ) : feedback === 'error' ? (
