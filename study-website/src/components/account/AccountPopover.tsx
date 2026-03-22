@@ -1,4 +1,4 @@
-import React from 'react';
+// No React import needed for React 18+ with JSX Transform
 import { User, Moon, Settings, LogOut } from 'lucide-react';
 
 interface AccountPopoverProps {
