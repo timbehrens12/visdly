@@ -28,7 +28,7 @@ import { ContactUsPage } from './pages/ContactUsPage';
 import { HelpCenterPage } from './pages/HelpCenterPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
-
+// import { DashboardApp } from './dashboard/DashboardApp';
 
 
 // List of school logo filenames
@@ -214,7 +214,12 @@ function LandingPage() {
 
   return (
     <div
-      className="relative min-h-screen font-sans overflow-x-hidden"
+      className="relative min-h-screen font-sans overflow-x-hidden text-slate-900"
+      style={{
+        backgroundColor: '#ffffff',
+        minHeight: '100vh',
+        width: '100%'
+      }}
     >
       {/* Light Mesh Gradient Background */}
       <div className="fixed inset-0 -z-20 overflow-hidden pointer-events-none">
@@ -688,7 +693,7 @@ export default function App() {
             <Route path="/contact" element={<ContactUsPage />} />
             <Route path="/help" element={<HelpCenterPage />} />
             <Route path="/login" element={<LoginPage />} />
-
+            {/* Dashboard moved to separate project: <Route path="/dashboard/*" element={<DashboardApp />} /> */}
             <Route path="/signup" element={<SignupPage />} />
           </Routes>
         </OnboardingGuard>

@@ -9,12 +9,12 @@ interface OnboardingGuardProps {
 
 export function OnboardingGuard({ children }: OnboardingGuardProps) {
     const { isSignedIn } = useClerkSession();
-    const { profile, refreshProfile, isLoading } = useProfile();
+    const { profile, refreshProfile, loading } = useProfile();
 
     // Show onboarding if logged in but not completed
     const showOnboarding = isSignedIn && profile && !profile.onboarding_completed;
 
-    if (isLoading) {
+    if (loading) {
         return null; // Or a subtle loading spinner
     }
 

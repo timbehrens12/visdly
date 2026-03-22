@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Moon, Sun, Settings, LogOut, ChevronRight, Bell, Shield, Key } from 'lucide-react';
+import React, { useState } from 'react';
+import { User, Moon, Sun, Settings, LogOut, ChevronRight, Bell, Shield, Key } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 export const AccountSettings = () => {
