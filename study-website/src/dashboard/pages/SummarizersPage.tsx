@@ -1,6 +1,6 @@
 import { useProfile } from '../contexts/ProfileContext';
 import { usePaywall } from '../contexts/PaywallContext';
-import { Sparkles, Zap, FileText, Brain, Layout, ListChecks, CheckCircle, Lock } from 'lucide-react';
+import { FileText, CheckCircle } from 'lucide-react';
 import { FadeInUp } from '../components/ui/MotionWrapper';
 
 export default function SummarizersPage() {

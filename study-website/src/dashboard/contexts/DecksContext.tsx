@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { supabase, getSupabaseClient } from '../lib/supabase';
+import { getSupabaseClient } from '../lib/supabase';
 import { useClerkSession } from '../lib/clerk';
 
 // ================================
@@ -90,13 +90,7 @@ const ACTIVE_DECK_KEY = 'viszmo_active_deck';
 // Default Data
 // ================================
 
-const defaultCards: Omit<Card, 'id' | 'createdAt'>[] = [
-    { front: "What is the powerhouse of the cell?", back: "Mitochondria" },
-    { front: "What is the process by which plants make food?", back: "Photosynthesis" },
-    { front: "Which organ is primarily responsible for filtering blood?", back: "Kidneys" },
-    { front: "What molecule carries genetic information?", back: "DNA (Deoxyribonucleic Acid)" },
-    { front: "What is the basic unit of life?", back: "The Cell" },
-];
+// Default data removed due to unused variable error.
 
 const generateId = () => `local_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 

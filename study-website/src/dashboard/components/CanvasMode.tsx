@@ -3,10 +3,6 @@ import { motion } from 'framer-motion';
 import { PenTool, Move, Undo, Trash2, Minus, Plus, Eraser, ChevronLeft } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
-import { useSidebar } from '../contexts/SidebarContext';
-import { useProfile } from '../contexts/ProfileContext';
-import { FadeInUp } from './ui/MotionWrapper';
-import { CheckCircle, Layout as LayoutIcon } from 'lucide-react';
 
 interface Stroke {
     points: { x: number; y: number }[];
@@ -20,7 +16,6 @@ export function CanvasMode() {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const { resolvedTheme } = useTheme();
     const navigate = useNavigate();
-    const { setHideSidebar } = useSidebar();
 
     // Tools state
     const [tool, setTool] = useState<'pen' | 'eraser' | 'pan'>('pen');

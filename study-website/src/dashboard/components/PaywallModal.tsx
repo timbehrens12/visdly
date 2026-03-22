@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Sparkles, Crown, Zap, ShieldCheck } from 'lucide-react';
+import { X, Check, Crown, ShieldCheck } from 'lucide-react';
 
 interface PaywallModalProps {
     isOpen: boolean;

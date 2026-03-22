@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import { supabase, getSupabaseClient } from '../lib/supabase';
+import { getSupabaseClient } from '../lib/supabase';
 import { useClerkSession } from '../lib/clerk';
 
 // ============================================
