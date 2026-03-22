@@ -1,0 +1,1202 @@
+/* StudyLayer Dashboard - Design System */
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import './styles/stars.css';
+
+@font-face {
+  font-family: 'Geist Pixel';
+  src: url('https://unpkg.com/geist/dist/fonts/geist-pixel/GeistPixel-Square.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   CSS CUSTOM PROPERTIES - LIGHT MODE (Default)
+   ============================================================================ */
+:root {
+  /* Brand Colors */
+  --color-brand-primary: #0ea5e9;
+  /* Sky-500 */
+  --color-brand-primary-hover: #0284c7;
+  /* Sky-600 */
+  --color-brand-primary-light: #e0f2fe;
+  /* Sky-100 */
+  --color-brand-secondary: #6366f1;
+  /* Indigo-500 */
+  --color-brand-secondary-hover: #4f46e5;
+  /* Indigo-600 */
+  --color-brand-accent: #8b5cf6;
+  /* Violet-500 */
+
+  /* Background Colors */
+  --color-background: #f8fafc;
+  /* Slate-50 */
+  --color-background-card: #ffffff;
+  --color-background-card-alt: #fdfbf7;
+  /* Paper/cream */
+  --color-background-elevated: #ffffff;
+  --color-background-glass: rgba(255, 255, 255, 0.8);
+
+  /* Surface Colors */
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f5f9;
+  /* Slate-100 */
+  --color-surface-active: #e2e8f0;
+  /* Slate-200 */
+
+  /* Text Colors */
+  --color-foreground: #0f172a;
+  /* Slate-900 */
+  --color-foreground-secondary: #64748b;
+  /* Slate-500 */
+  --color-foreground-muted: #94a3b8;
+  /* Slate-400 */
+  --color-foreground-inverse: #ffffff;
+
+  /* Border Colors */
+  --color-border: #e2e8f0;
+  /* Slate-200 */
+  --color-border-light: #f1f5f9;
+  /* Slate-100 */
+  --color-border-strong: #cbd5e1;
+  /* Slate-300 */
+
+  /* Semantic Colors */
+  --color-success: #10b981;
+  /* Emerald-500 */
+  --color-success-light: #d1fae5;
+  /* Emerald-100 */
+  --color-warning: #f59e0b;
+  /* Amber-500 */
+  --color-warning-light: #fef3c7;
+  /* Amber-100 */
+  --color-error: #ef4444;
+  /* Red-500 */
+  --color-error-light: #fee2e2;
+  /* Red-100 */
+  --color-info: #3b82f6;
+  /* Blue-500 */
+  --color-info-light: #dbeafe;
+  /* Blue-100 */
+
+  /* Glass Effects */
+  --color-glass-border: rgba(0, 0, 0, 0.08);
+  --color-glass-bg: rgba(255, 255, 255, 0.8);
+  --color-glass-highlight: rgba(0, 0, 0, 0.05);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-primary: 0 10px 40px -10px rgba(14, 165, 233, 0.3);
+  --shadow-primary-strong: 0 20px 40px -10px rgba(14, 165, 233, 0.4);
+
+  /* Sidebar */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 80px;
+}
+
+/* ============================================================================
+   CSS CUSTOM PROPERTIES - DARK MODE
+   ============================================================================ */
+.dark {
+  /* Brand Colors - slightly adjusted for dark mode visibility */
+  --color-brand-primary: #38bdf8;
+  /* Sky-400 */
+  --color-brand-primary-hover: #0ea5e9;
+  /* Sky-500 */
+  --color-brand-primary-light: #0c4a6e;
+  /* Sky-900 */
+  --color-brand-secondary: #818cf8;
+  /* Indigo-400 */
+  --color-brand-secondary-hover: #6366f1;
+  /* Indigo-500 */
+  --color-brand-accent: #a78bfa;
+  /* Violet-400 */
+
+  /* Background Colors */
+  --color-background: #0c0c0d;
+  --color-background-card: #111112;
+  --color-background-card-alt: #161618;
+  --color-background-elevated: #1a1a1c;
+  --color-background-glass: rgba(12, 12, 13, 0.8);
+
+  /* Surface Colors */
+  --color-surface: #111112;
+  --color-surface-hover: #1a1a1c;
+  --color-surface-active: #242426;
+
+  /* Text Colors */
+  --color-foreground: #ededed;
+  --color-foreground-secondary: #a1a1aa;
+  --color-foreground-muted: #71717a;
+  --color-foreground-inverse: #0c0c0d;
+
+  /* Border Colors */
+  --color-border: #27272a;
+  --color-border-light: #18181b;
+  --color-border-strong: #3f3f46;
+
+  /* Semantic Colors - adjusted for dark mode */
+  --color-success: #34d399;
+  /* Emerald-400 */
+  --color-success-light: #064e3b;
+  /* Emerald-900 */
+  --color-warning: #fbbf24;
+  /* Amber-400 */
+  --color-warning-light: #78350f;
+  /* Amber-900 */
+  --color-error: #f87171;
+  /* Red-400 */
+  --color-error-light: #7f1d1d;
+  /* Red-900 */
+  --color-info: #60a5fa;
+  /* Blue-400 */
+  --color-info-light: #1e3a8a;
+  /* Blue-900 */
+
+  /* Glass Effects */
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass-bg: rgba(30, 41, 59, 0.8);
+  --color-glass-highlight: rgba(255, 255, 255, 0.05);
+
+  /* Shadows - darker for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.2);
+  --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-primary: 0 10px 40px -10px rgba(56, 189, 248, 0.3);
+  --shadow-primary-strong: 0 20px 40px -10px rgba(56, 189, 248, 0.4);
+}
+
+/* ============================================================================
+   BASE LAYER STYLES
+   ============================================================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  p,
+  li {
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply font-bold text-foreground;
+  }
+
+  /* Focus styles */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-offset-2;
+    --tw-ring-color: var(--color-brand-primary);
+    --tw-ring-offset-color: var(--color-background);
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-brand-primary) 30%, transparent);
+    @apply text-foreground;
+  }
+}
+
+/* ============================================================================
+   COMPONENT LAYER - REUSABLE COMPONENTS
+   ============================================================================ */
+@layer components {
+
+  /* Cards */
+  .card {
+    @apply bg-background-card rounded-2xl border border-border shadow-card transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-card-hover hover:border-border-strong;
+  }
+
+  .card-elevated {
+    @apply bg-background-elevated rounded-2xl shadow-lg;
+  }
+
+  .card-glass {
+    @apply backdrop-blur-xl border border-glass-border shadow-xl;
+    background: var(--color-background-glass);
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center font-semibold transition-all duration-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98];
+  }
+
+  .btn-primary {
+    @apply btn text-white border border-white/10 relative overflow-hidden;
+    background: linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-primary-hover) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent);
+    transition: all 0.6s;
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%,
+        rgba(255, 255, 255, 0.4) 0%,
+        transparent 60%);
+    opacity: 0;
+    mix-blend-mode: overlay;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .btn-primary:hover::after {
+    opacity: 1;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-brand-primary-hover) 0%, var(--color-brand-primary) 100%);
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    @apply scale-[0.98];
+  }
+
+  /* SRS Premium Buttons */
+  .btn-srs {
+    @apply btn text-white border border-white/10 relative overflow-hidden h-14 w-14 rounded-full p-0 flex items-center justify-center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-srs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: all 0.6s;
+  }
+
+  .btn-srs:hover::before {
+    left: 100%;
+  }
+
+  .btn-srs::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%,
+        rgba(255, 255, 255, 0.4) 0%,
+        transparent 60%);
+    opacity: 0;
+    mix-blend-mode: overlay;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .btn-srs:hover::after {
+    opacity: 1;
+  }
+
+  .btn-srs:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-srs:active {
+    transform: translateY(0);
+    @apply scale-[0.95];
+  }
+
+  .btn-srs-learning {
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  }
+
+  .btn-srs-somewhat {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  }
+
+  .btn-srs-know {
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  }
+
+  .btn-primary:focus {
+    --tw-ring-color: var(--color-brand-primary);
+  }
+
+  .btn-secondary {
+    @apply btn bg-brand-secondary text-foreground-inverse hover:bg-brand-secondary-hover;
+  }
+
+  .btn-secondary:focus {
+    --tw-ring-color: var(--color-brand-secondary);
+  }
+
+  .btn-outline {
+    @apply btn bg-transparent border-2 border-border text-foreground hover:bg-surface-hover hover:border-border-strong;
+  }
+
+  .btn-outline:focus {
+    --tw-ring-color: var(--color-brand-primary);
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-foreground-secondary hover:bg-surface-hover hover:text-foreground;
+  }
+
+  .btn-ghost:focus {
+    --tw-ring-color: var(--color-brand-primary);
+  }
+
+  .btn-danger {
+    @apply btn bg-error text-white;
+  }
+
+  .btn-danger:hover {
+    background-color: color-mix(in srgb, var(--color-error) 90%, black);
+  }
+
+  .btn-danger:focus {
+    --tw-ring-color: var(--color-error);
+  }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-10 h-10 rounded-xl text-foreground-secondary hover:bg-surface-hover hover:text-foreground transition-all duration-200 focus:ring-2;
+  }
+
+  .btn-icon:focus {
+    --tw-ring-color: color-mix(in srgb, var(--color-brand-primary) 20%, transparent);
+  }
+
+  /* ============================================================================
+     PREMIUM BUTTON STYLES (from studylayer-website)
+     ============================================================================ */
+
+  /* Premium Button Wrapper */
+  .btn-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Premium 3D Button with Radial Gradient */
+  .btn-premium {
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 28px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 0;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    color: #ffffff;
+
+    /* Radial gradient background */
+    background: radial-gradient(115% 115% at 10% 20%,
+        hsl(199, 88%, 48%) 0%,
+        hsl(199, 88%, 40%) 100%);
+
+    /* Complex shadow stack for 3D effect */
+    box-shadow:
+      inset -3px -3px 4px rgba(14, 165, 233, 0.4),
+      inset 3px 3px 4px rgba(255, 255, 255, 0.2),
+      0 2px 10px rgba(14, 165, 233, 0.3),
+      0 10px 20px rgba(14, 165, 233, 0.2);
+
+    transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  /* Glare effect overlay */
+  .btn-premium::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%,
+        rgba(255, 255, 255, 0.4) 0%,
+        transparent 60%);
+    opacity: 0;
+    mix-blend-mode: overlay;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .btn-premium:hover {
+    transform: scale(1.05);
+    box-shadow:
+      inset -3px -3px 4px rgba(14, 165, 233, 0.5),
+      inset 3px 3px 4px rgba(255, 255, 255, 0.3),
+      0 4px 15px rgba(14, 165, 233, 0.5),
+      0 15px 30px rgba(14, 165, 233, 0.3),
+      0 0 40px rgba(14, 165, 233, 0.2);
+  }
+
+  .btn-premium:hover::after {
+    opacity: 1;
+  }
+
+  .btn-premium:active {
+    transform: scale(0.97);
+    box-shadow:
+      inset -2px -2px 4px rgba(14, 165, 233, 0.3),
+      inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+      0 2px 5px rgba(14, 165, 233, 0.3);
+  }
+
+  /* Dark mode adaptation for premium button */
+  .dark .btn-premium {
+    background: radial-gradient(115% 115% at 10% 20%,
+        hsl(199, 88%, 58%) 0%,
+        hsl(199, 88%, 48%) 100%);
+
+    box-shadow:
+      inset -3px -3px 4px rgba(56, 189, 248, 0.4),
+      inset 3px 3px 4px rgba(255, 255, 255, 0.1),
+      0 2px 10px rgba(56, 189, 248, 0.3),
+      0 10px 20px rgba(56, 189, 248, 0.2);
+  }
+
+  .dark .btn-premium:hover {
+    box-shadow:
+      inset -3px -3px 4px rgba(56, 189, 248, 0.5),
+      inset 3px 3px 4px rgba(255, 255, 255, 0.2),
+      0 4px 15px rgba(56, 189, 248, 0.5),
+      0 15px 30px rgba(56, 189, 248, 0.3),
+      0 0 40px rgba(56, 189, 248, 0.2);
+  }
+
+  /* Button text wrapper */
+  .btn-text {
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  /* Button SVG icon */
+  .btn-svg {
+    flex-shrink: 0;
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+    fill: currentColor;
+  }
+
+  /* Small button variant */
+  .btn-sm {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  .btn-sm .btn-svg {
+    height: 18px;
+    width: 18px;
+    margin-right: 6px;
+  }
+
+  /* Icon button (circular) */
+  .icon-btn {
+    user-select: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-foreground-secondary);
+    box-shadow: inset 0.4px 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.15s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .icon-btn:hover {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-border-strong);
+    box-shadow:
+      inset 0.4px 1px 4px rgba(0, 0, 0, 0.15),
+      2px 4px 8px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+  }
+
+  .icon-btn:active {
+    transform: scale(0.95);
+    box-shadow:
+      inset 0.4px 1px 6px rgba(0, 0, 0, 0.2),
+      0px 0px 6px rgba(0, 0, 0, 0.1);
+  }
+
+
+  /* Inputs */
+  .input {
+    @apply w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-foreground placeholder:text-foreground-muted transition-all duration-200 focus:outline-none focus:ring-2 focus:border-brand-primary;
+  }
+
+  .input:focus {
+    --tw-ring-color: color-mix(in srgb, var(--color-brand-primary) 20%, transparent);
+  }
+
+  .input-error {
+    @apply input border-error focus:border-error;
+  }
+
+  .input-error:focus {
+    --tw-ring-color: color-mix(in srgb, var(--color-error) 20%, transparent);
+  }
+
+  /* Labels */
+  .label {
+    @apply block text-sm font-medium text-foreground mb-1.5;
+  }
+
+  .label-muted {
+    @apply text-xs text-foreground-muted uppercase tracking-wider font-bold;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-primary {
+    @apply badge bg-brand-primary-light text-brand-primary;
+  }
+
+  .badge-success {
+    @apply badge bg-success-light text-success;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning-light text-warning;
+  }
+
+  .badge-error {
+    @apply badge bg-error-light text-error;
+  }
+
+  .badge-info {
+    @apply badge bg-info-light text-info;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    @apply fixed left-0 top-0 h-screen flex flex-col transition-all duration-200 ease-in-out z-50;
+    width: var(--sidebar-width);
+
+    /* Liquid Glass Effect */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05));
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+      10px 0 40px rgba(0, 0, 0, 0.05),
+      inset -1px 0 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .dark .sidebar {
+    background: #111112;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow:
+      10px 0 40px rgba(0, 0, 0, 0.4),
+      inset -1px 0 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .sidebar-collapsed {
+    width: var(--sidebar-collapsed-width);
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-foreground-secondary hover:bg-surface-hover hover:text-foreground transition-all duration-200 cursor-pointer;
+  }
+
+  .sidebar-item-active {
+    @apply sidebar-item text-brand-primary;
+    background-color: color-mix(in srgb, var(--color-brand-primary) 10%, transparent);
+  }
+
+  /* Main content area */
+  .main-content {
+    @apply min-h-screen bg-background transition-all duration-200 ease-in-out;
+    margin-left: 280px;
+    /* var(--sidebar-width) might not work if not defined in root, making explicit for now or use var if sure */
+    margin-left: var(--sidebar-width);
+  }
+
+  .main-content-collapsed {
+    margin-left: var(--sidebar-collapsed-width);
+  }
+
+  /* Avatar */
+  .avatar {
+    @apply inline-flex items-center justify-center rounded-full text-brand-primary font-semibold;
+    background-color: color-mix(in srgb, var(--color-brand-primary) 10%, transparent);
+  }
+
+  .avatar-sm {
+    @apply avatar w-8 h-8 text-sm;
+  }
+
+  .avatar-md {
+    @apply avatar w-10 h-10 text-base;
+  }
+
+  .avatar-lg {
+    @apply avatar w-12 h-12 text-lg;
+  }
+
+  /* Dropdown */
+  .dropdown {
+    @apply absolute right-0 mt-2 w-56 rounded-xl bg-background-card border border-border shadow-lg z-50 overflow-hidden animate-fade-in;
+  }
+
+  .dropdown-item {
+    @apply flex items-center gap-3 px-4 py-3 text-sm text-foreground-secondary hover:bg-surface-hover hover:text-foreground cursor-pointer transition-colors;
+  }
+
+  /* Table */
+  .table {
+    @apply w-full text-left;
+  }
+
+  .table th {
+    @apply px-4 py-3 text-xs font-bold text-foreground-muted uppercase tracking-wider bg-surface border-b border-border;
+  }
+
+  .table td {
+    @apply px-4 py-4 text-sm text-foreground border-b border-border;
+  }
+
+  .table tbody tr:hover {
+    @apply bg-surface-hover;
+  }
+
+  /* Stats Card */
+  .stat-card {
+    @apply card p-6;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold text-foreground;
+  }
+
+  .stat-label {
+    @apply text-sm text-foreground-secondary mt-1;
+  }
+
+  .stat-change {
+    @apply text-xs font-medium mt-2;
+  }
+
+  .stat-change-positive {
+    @apply stat-change text-success;
+  }
+
+  .stat-change-negative {
+    @apply stat-change text-error;
+  }
+}
+
+/* ============================================================================
+   UTILITY LAYER - CUSTOM UTILITIES
+   ============================================================================ */
+@layer utilities {
+
+  /* Text Gradients */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary;
+  }
+
+  /* Glass Effects */
+  .glass-panel {
+    @apply backdrop-blur-2xl border border-glass-border shadow-2xl;
+    background: var(--color-glass-bg);
+  }
+
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+  }
+
+  /* Truncate text */
+  .truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* 3D Transform Utilities */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  /* ============================================================================
+     PREMIUM UTILITIES (from studylayer-website)
+     ============================================================================ */
+
+  /* Glass Effects */
+  .glass-panel {
+    @apply backdrop-blur-2xl border shadow-2xl;
+    background: var(--color-background-glass);
+    border-color: var(--color-glass-border);
+  }
+
+  .glass-card-hover {
+    @apply transition-all duration-300;
+  }
+
+  .glass-card-hover:hover {
+    background: color-mix(in srgb, var(--color-surface) 96%, var(--color-brand-primary));
+    border-color: var(--color-border-strong);
+    box-shadow: 0 0 30px color-mix(in srgb, var(--color-brand-primary) 10%, transparent);
+  }
+
+  /* Text Gradients */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to bottom,
+        var(--color-foreground),
+        var(--color-foreground),
+        color-mix(in srgb, var(--color-foreground) 50%, transparent));
+  }
+
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400;
+  }
+
+  /* Perspective Utilities */
+  .perspective-2000 {
+    perspective: 2000px;
+  }
+
+  /* Mask Gradients */
+  .mask-gradient-b {
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  }
+
+  /* Shadow Effects */
+  .inner-shadow-focus {
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.15);
+  }
+
+  .dark .glow-blue {
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+  }
+
+  /* Stat Label */
+  .stat-label {
+    @apply text-[10px] font-black uppercase tracking-[0.2em];
+    color: var(--color-foreground-muted);
+  }
+}
+
+/* ============================================================================
+   CUSTOM SCROLLBAR
+   ============================================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
+}
+
+/* Uiverse Button Design from studylayer-website */
+.btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.btn-custom {
+  /* Layout & Sizing */
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 28px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  /* For the glare effect */
+  isolation: isolate;
+  /* Create new stacking context */
+
+  /* Colors */
+  --btn-color-h: 199;
+  --btn-color-s: 88%;
+  --btn-color-l: 48%;
+  color: #ffffff;
+
+  /* Cluely-Inspired Radial Background */
+  background: radial-gradient(115% 115% at 10% 20%,
+      hsla(var(--btn-color-h), var(--btn-color-s), var(--btn-color-l), 1) 0%,
+      hsla(var(--btn-color-h), var(--btn-color-s), 40%, 1) 100%);
+
+  /* Complex Native Shadow Stack */
+  box-shadow:
+    /* Inner highlights */
+    inset -3px -3px 4px rgba(14, 165, 233, 0.4),
+    inset 3px 3px 4px rgba(255, 255, 255, 0.2),
+    /* Soft glows */
+    0 2px 10px rgba(14, 165, 233, 0.3),
+    0 10px 20px rgba(14, 165, 233, 0.2);
+
+  transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.btn-black {
+  /* Override background for black theme */
+  background: radial-gradient(115% 115% at 10% 20%,
+      hsl(220, 10%, 25%) 0%,
+      hsl(220, 10%, 10%) 100%);
+
+  /* Override shadows to be monochrome/neutral */
+  box-shadow:
+    /* Inner highlights - subtler on black */
+    inset -3px -3px 4px rgba(0, 0, 0, 0.5),
+    inset 3px 3px 4px rgba(255, 255, 255, 0.15),
+    /* Soft glows - dark shadow instead of colored glow */
+    0 2px 10px rgba(0, 0, 0, 0.3),
+    0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-black:hover {
+  /* Maintain black background */
+
+  /* Update hover shadows to match black theme */
+  box-shadow:
+    inset -3px -3px 4px rgba(0, 0, 0, 0.6),
+    inset 3px 3px 4px rgba(255, 255, 255, 0.2),
+    0 4px 15px rgba(0, 0, 0, 0.4),
+    0 15px 30px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(0, 0, 0, 0.1);
+}
+
+.btn-black:active {
+  box-shadow:
+    inset -2px -2px 4px rgba(0, 0, 0, 0.5),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+    0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.btn-white {
+  /* Darker Silver/Metallic theme */
+  color: #0c0c0d;
+  background: radial-gradient(115% 115% at 10% 20%,
+      #e2e8f0 0%,
+      /* Slate-200 */
+      #94a3b8 100%);
+  /* Slate-400 */
+
+  /* Premium Glass Shadows */
+  box-shadow:
+    inset -3px -3px 4px rgba(71, 85, 105, 0.2),
+    /* Slate-600 */
+    inset 3px 3px 4px rgba(255, 255, 255, 0.6),
+    0 2px 10px rgba(0, 0, 0, 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-custom.btn-white:hover {
+  transform: scale(1.02);
+  /* Keep same dark silver gradient on hover, maybe slightly lighter but NOT white */
+  background: radial-gradient(115% 115% at 10% 20%,
+      #e2e8f0 0%,
+      /* Slate-200 */
+      #94a3b8 100%);
+  /* Slate-400 */
+  /* Slate-300 */
+
+  box-shadow:
+    inset -3px -3px 4px rgba(71, 85, 105, 0.3),
+    inset 3px 3px 4px rgba(255, 255, 255, 0.7),
+    0 4px 15px rgba(255, 255, 255, 0.1),
+    0 15px 30px rgba(0, 0, 0, 0.15),
+    0 0 40px rgba(255, 255, 255, 0.05);
+
+  color: #0c0c0d !important;
+  /* Force override */
+}
+
+.btn-custom.btn-white:active {
+  transform: scale(0.98);
+  box-shadow:
+    inset -2px -2px 4px rgba(71, 85, 105, 0.3),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    0 2px 5px rgba(0, 0, 0, 0.2);
+
+  color: #0c0c0d !important;
+}
+
+.btn-upgrade {
+  background: radial-gradient(115% 115% at 10% 20%,
+      #8b5cf6 0%,
+      #6d28d9 100%);
+  color: white;
+  box-shadow:
+    inset -3px -3px 4px rgba(109, 40, 217, 0.4),
+    inset 3px 3px 4px rgba(255, 255, 255, 0.3),
+    0 2px 10px rgba(139, 92, 246, 0.3),
+    0 10px 20px rgba(139, 92, 246, 0.2);
+}
+
+.btn-upgrade:hover {
+  background: radial-gradient(115% 115% at 10% 20%,
+      #9d71fd 0%,
+      #7c3aed 100%);
+  box-shadow:
+    inset -3px -3px 4px rgba(109, 40, 217, 0.5),
+    inset 3px 3px 4px rgba(255, 255, 255, 0.4),
+    0 4px 15px rgba(139, 92, 246, 0.5),
+    0 15px 30px rgba(139, 92, 246, 0.3),
+    0 0 40px rgba(139, 92, 246, 0.2);
+}
+
+
+/* "Glint" / Glare Effect Container */
+.btn-custom::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%,
+      rgba(255, 255, 255, 0.4) 0%,
+      transparent 60%);
+  opacity: 0;
+  mix-blend-mode: overlay;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.btn-custom:hover {
+  transform: scale(1.05);
+
+  /* Intensified Shadows on Hover */
+  box-shadow:
+    inset -3px -3px 4px rgba(14, 165, 233, 0.5),
+    inset 3px 3px 4px rgba(255, 255, 255, 0.3),
+    0 4px 15px rgba(14, 165, 233, 0.5),
+    0 15px 30px rgba(14, 165, 233, 0.3),
+    0 0 40px rgba(14, 165, 233, 0.2);
+
+  color: white;
+}
+
+.btn-custom:hover::after {
+  opacity: 1;
+}
+
+.btn-custom:active {
+  transform: scale(0.97);
+
+  box-shadow:
+    inset -2px -2px 4px rgba(14, 165, 233, 0.3),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+    0 2px 5px rgba(14, 165, 233, 0.3);
+}
+
+.btn-text {
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* Liquid Glass Button Design */
+.btn-liquid {
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  border-radius: 12px;
+  background-color: transparent;
+}
+
+.btn-liquid::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(-135deg, rgba(0, 0, 0, 0.1), transparent 20%, transparent 100%);
+  filter: blur(1px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.btn-liquid .button-outer {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  border-radius: inherit;
+  transition: box-shadow 300ms ease;
+  box-shadow: 0 1px 1px -0.5px rgba(0, 0, 0, 0.1), 0 0.5px 0.5px -0.5px rgba(0, 0, 0, 0.05);
+}
+
+.btn-liquid:hover .button-outer {
+  box-shadow: none;
+}
+
+.btn-liquid .button-inner {
+  position: relative;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  /* Light mode default */
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 1px 1px 2px 0 rgba(255, 255, 255, 1),
+    -1px -1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.dark .btn-liquid .button-inner {
+  /* Dark mode override */
+  background: linear-gradient(135deg, #1a1a1c, #111112);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 1px 1px 2px 0 rgba(255, 255, 255, 0.1),
+    -1px -1px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.btn-liquid:hover .button-inner {
+  transform: scale(0.98);
+}
+
+.btn-liquid .button-inner span {
+  position: relative;
+  z-index: 10;
+  font-weight: 600;
+  color: var(--color-foreground);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Arcade Mode Font Override */
+.arcade-mode,
+.arcade-mode * {
+  font-family: 'Geist Pixel', 'JetBrains Mono', monospace !important;
+}
