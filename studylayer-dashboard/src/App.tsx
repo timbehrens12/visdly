@@ -39,7 +39,7 @@ function App() {
                     <DebugProvider>
                       <DecksProvider>
                         <SidebarProvider>
-                          <Router>
+                          <Router basename="/dashboard">
                             <ProtectedRoute>
                               <Layout>
                                 <Routes>
