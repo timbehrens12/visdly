@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import GamePage from './pages/GamePage';
 import { Layout } from './components/Layout';
 import { SidebarProvider } from './contexts/SidebarContext';
@@ -54,6 +54,7 @@ export default function App() {
                                 <Route path="/summarizers" element={<SummarizersPage />} />
                                 <Route path="/notifications" element={<NotificationsPage />} />
                                 <Route path="/generate/:method" element={<GeneratePage />} />
+                                <Route path="*" element={<Navigate to="/" replace />} />
                               </Routes>
                             </Layout>
                           </ProtectedRoute>
