@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/dashboard/(.*)",
+      "destination": "/viszmo-dashboard/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/study-website/$1"
+    }
+  ]
+}
