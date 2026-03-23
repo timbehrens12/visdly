@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite --port 5173\" \"cd ../studylayer-dashboard && npm run dev -- --port 5174\"",
+    "dev": "vite",
     "dev:website": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

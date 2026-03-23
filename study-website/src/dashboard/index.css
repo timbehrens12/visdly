@@ -19,12 +19,17 @@
     min-height: 100vh;
     background-color: var(--color-background);
     color: var(--color-foreground);
-    @apply antialiased selection:bg-brand-primary/20 dark;
+    @apply antialiased dark;
     font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     background-image: 
       radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.05) 0%, transparent 50%),
       radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
     background-attachment: fixed;
+}
+
+.dashboard-theme ::selection {
+    background-color: rgba(14, 165, 233, 0.2);
+    color: inherit;
 }
 
 .dashboard-theme h1, 
@@ -40,83 +45,79 @@
 /* ============================================================================
    COMPONENT LAYER - PREMIUM INTERFACE
    ============================================================================ */
-@layer components {
 
-  /* Liquid Glass Panels */
-  .glass-panel {
-    @apply backdrop-blur-3xl border border-glass-border shadow-2xl;
-    background: var(--color-background-glass);
-    box-shadow: 
-      inset 0 1px 0 rgba(255, 255, 255, 0.05),
-      0 10px 40px -10px rgba(0, 0, 0, 0.4);
-  }
+/* Liquid Glass Panels */
+.glass-panel {
+  @apply backdrop-blur-3xl border border-glass-border shadow-2xl;
+  background: var(--color-background-glass);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 40px -10px rgba(0, 0, 0, 0.4);
+}
 
-  /* Interactive Cards */
-  .card-premium {
-    @apply bg-background-card rounded-[2rem] border border-border shadow-card transition-all duration-300 hover:shadow-premium hover:border-brand-primary/30 relative overflow-hidden;
-  }
+/* Interactive Cards */
+.card-premium {
+  @apply bg-background-card rounded-[2rem] border border-border shadow-card transition-all duration-300 hover:shadow-premium hover:border-brand-primary/30 relative overflow-hidden;
+}
 
-  .card-premium::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
 
-  .card-premium:hover::before {
-    @apply opacity-100;
-  }
+.card-premium:hover::before {
+  @apply opacity-100;
+}
 
-  /* Premium Buttons */
-  .btn-premium {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl font-bold transition-all relative overflow-hidden select-none active:scale-95;
-    background: linear-gradient(135deg, var(--color-brand-primary) 0%, #0369a1 100%);
-    box-shadow: 
-      inset 0 1px 0 rgba(255, 255, 255, 0.2),
-      0 8px 20px -5px rgba(14, 165, 233, 0.4);
-  }
+/* Premium Buttons */
+.btn-premium {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl font-bold transition-all relative overflow-hidden select-none active:scale-95;
+  background: linear-gradient(135deg, var(--color-brand-primary) 0%, #0369a1 100%);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 8px 20px -5px rgba(14, 165, 233, 0.4);
+}
 
-  .btn-premium:hover {
-    @apply -translate-y-0.5 shadow-premium-strong;
-    filter: brightness(1.1);
-  }
+.btn-premium:hover {
+  @apply -translate-y-0.5 shadow-premium-strong;
+  filter: brightness(1.1);
+}
 
-  .btn-glass {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl font-bold bg-white/5 border border-white/10 hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm;
-  }
+.btn-glass {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl font-bold bg-white/5 border border-white/10 hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm;
+}
 
-  /* Badge Styles */
-  .badge-premium {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-brand-primary/10 text-brand-primary border border-brand-primary/20;
-  }
+/* Badge Styles */
+.badge-premium {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-brand-primary/10 text-brand-primary border border-brand-primary/20;
+}
 
-  /* Sidebar Styles */
-  .sidebar-link {
-    @apply flex items-center gap-4 px-4 py-3 rounded-2xl text-foreground-secondary hover:text-foreground hover:bg-white/5 transition-all group;
-  }
+/* Sidebar Styles */
+.sidebar-link {
+  @apply flex items-center gap-4 px-4 py-3 rounded-2xl text-foreground-secondary hover:text-foreground hover:bg-white/5 transition-all group;
+}
 
-  .sidebar-link-active {
-    @apply sidebar-link text-brand-primary bg-brand-primary/10;
-  }
+.sidebar-link-active {
+  @apply sidebar-link text-brand-primary bg-brand-primary/10;
 }
 
 /* ============================================================================
    UTILITY LAYER - MICRO-ANIMATIONS
    ============================================================================ */
-@layer utilities {
-  .animate-shimmer {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite linear;
-  }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
 
-  .text-glow {
-    text-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
-  }
+.text-glow {
+  text-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+}
 
-  .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-accent;
-  }
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-accent;
 }
