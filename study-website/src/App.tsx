@@ -28,7 +28,7 @@ import { ContactUsPage } from './pages/ContactUsPage';
 import { HelpCenterPage } from './pages/HelpCenterPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
-// import { DashboardApp } from './dashboard/DashboardApp';
+import DashboardApp from './dashboard/App';
 
 
 // List of school logo filenames
@@ -693,7 +693,7 @@ export default function App() {
             <Route path="/contact" element={<ContactUsPage />} />
             <Route path="/help" element={<HelpCenterPage />} />
             <Route path="/login" element={<LoginPage />} />
-            {/* Dashboard moved to separate project: <Route path="/dashboard/*" element={<DashboardApp />} /> */}
+            <Route path="/dashboard/*" element={<DashboardApp />} />
             <Route path="/signup" element={<SignupPage />} />
           </Routes>
         </OnboardingGuard>
